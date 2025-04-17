@@ -1,0 +1,18 @@
+[jira]
+url = "https://yourcompany.atlassian.net"
+project_key = "PROJ"
+issue_type = "Sub-task"
+labels = ["cli", "auto"]
+assignee = "john.doe"
+
+[[subtasks]]
+summary = "Create database schema"
+description = "Define tables and relationships for the new feature."
+
+[[subtasks]]
+summary = "Implement service layer"
+description = "Business logic and integration with database."
+
+[[subtasks]]
+summary = "Write tests"
+description = "Unit and integration tests for service layer."
