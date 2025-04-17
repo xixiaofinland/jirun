@@ -24,15 +24,20 @@ pub struct SubtaskEntry {
 }
 
 pub fn load_config() -> Result<JiraConfig, Box<dyn std::error::Error>> {
-    let config_path: PathBuf = dirs::home_dir()
-        .ok_or("❌ Could not determine home directory")?
-        .join(".jirar.toml");
+    let local_path = std::env::current_dir()?.join(".jirar.toml");
+    let config_path = if local_path.exists() {
+        local_path
+    } else {
+        dirs::home_dir()
+            .ok_or("❌ Could not determine home directory")?
+            .join(".jirar.toml")
+    };
 
     let content = fs::read_to_string(&config_path)
         .map_err(|e| format!("❌ Failed to read config file at {:?}: {}", config_path, e))?;
 
-    let config: JiraConfig = toml::from_str(&content)
-        .map_err(|e| format!("❌ Failed to parse TOML config: {}", e))?;
+    let config: JiraConfig =
+        toml::from_str(&content).map_err(|e| format!("❌ Failed to parse TOML config: {}", e))?;
 
     Ok(config)
 }
