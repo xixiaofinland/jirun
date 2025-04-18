@@ -1,7 +1,7 @@
 mod config;
 
 use clap::{Parser, Subcommand};
-use config::load_config;
+use config::{init_config, load_config};
 use std::env;
 
 #[derive(Parser)]
@@ -19,11 +19,15 @@ enum Commands {
         #[arg(short, long)]
         parent: String,
     },
+
     /// Create sub-tasks from new_tasks
     New {
         #[arg(short, long)]
         parent: String,
     },
+
+    /// Generate a default .jist.toml config file
+    Init,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -31,6 +35,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let token = env::var("JIRA_TOKEN").expect("JIRA_TOKEN environment variable must be set");
     let config = load_config()?;
     match cli.command {
+        Commands::Init => {
+            init_config()?;
+            println!("✅ Created .jist.toml in current directory.");
+        }
         Commands::Template { parent } => {
             println!("🔗 Parent issue: {parent}");
             println!("🧩 Server: {}", config.server.url);
@@ -52,3 +60,4 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     Ok(())
 }
+
