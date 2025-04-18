@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/xixiaofinland/jirun/compare/v0.6.0...v0.7.0) (2025-04-18)
+
+
+### Features
+
+* add integration tests ([8cf2858](https://github.com/xixiaofinland/jirun/commit/8cf285850ce4aaa8a6712fba31373bdd2b33ecf2))
+
 ## [0.6.0](https://github.com/xixiaofinland/jirun/compare/v0.5.0...v0.6.0) (2025-04-18)
 
 
