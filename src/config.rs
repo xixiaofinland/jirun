@@ -2,8 +2,7 @@ use serde::Deserialize;
 use std::fs;
 use std::path::Path;
 
-const DEFAULT_CONFIG: &str = r#"
-[server]
+const DEFAULT_CONFIG: &str = r#"[server]
 url = "https://yourcompany.atlassian.net"
 
 [prefill]
