@@ -1,5 +1,39 @@
 use serde::Deserialize;
 use std::fs;
+use std::path::Path;
+
+const DEFAULT_CONFIG: &str = r#"
+[server]
+url = "https://yourcompany.atlassian.net"
+
+[prefill]
+labels = ["cli"]
+assignee = "john.doe"
+
+[sub_tasks]
+template_tasks = """
+Set up database schema
+Implement service logic
+Write integration tests
+"""
+
+new_tasks = """
+Fix login bug
+Refactor error handling
+Document API usage
+"""
+"#;
+
+pub fn init_config() -> Result<(), Box<dyn std::error::Error>> {
+    let path = Path::new(".jist.toml");
+    if path.exists() {
+        println!("⚠️  .jist.toml already exists. Not overwriting.");
+        return Ok(());
+    }
+
+    fs::write(path, DEFAULT_CONFIG)?;
+    Ok(())
+}
 
 #[derive(Debug, Deserialize)]
 pub struct Server {
@@ -58,9 +92,12 @@ pub fn load_config() -> Result<JiraConfig, Box<dyn std::error::Error>> {
     }
     let content = fs::read_to_string(&config_path)
         .map_err(|e| format!("❌ Failed to read config file at {:?}: {}", config_path, e))?;
-    eprintln!("gopro[234]: config.rs:54: content={}", content);
-    let config: JiraConfig = toml::from_str(&content)
-        .map_err(|e| format!("❌ Failed to parse TOML config: {}\nContent:\n{}", e, content))?;
+    let config: JiraConfig = toml::from_str(&content).map_err(|e| {
+        format!(
+            "❌ Failed to parse TOML config: {}\nContent:\n{}",
+            e, content
+        )
+    })?;
     Ok(config)
 }
 
