@@ -3,6 +3,7 @@ mod config;
 use clap::{Parser, Subcommand};
 use config::{init_config, load_config};
 use std::env;
+use std::io::{self, Write};
 
 #[derive(Parser)]
 #[command(name = "jist")]
@@ -15,13 +16,13 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Create sub-tasks from template_tasks
+    /// Create sub-tasks from the [sub_tasks.template_tasks] section of the config
     Template {
         #[arg(short = 'p', long = "parent")]
         parent: String,
     },
 
-    /// Create sub-tasks from new_tasks
+    /// Create sub-tasks from the [sub_tasks.new_tasks] section of the config
     New {
         #[arg(short = 'p', long = "parent")]
         parent: String,
@@ -33,36 +34,82 @@ enum Commands {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
-    let token = env::var("JIRA_TOKEN").expect("JIRA_TOKEN environment variable must be set");
 
     match cli.command {
         Commands::Init => {
             if init_config()? {
                 println!("✅ Created .jist.toml in current directory.");
             }
+            return Ok(());
         }
 
         Commands::Template { parent } => {
+            let _token = env::var("JIRA_TOKEN").expect("JIRA_TOKEN environment variable must be set");
             let config = load_config()?;
-            println!("🔗 Parent issue: {parent}");
-            println!("🧩 Server: {}", config.server.url);
-            println!("⚙️  Prefill: {:?}", config.prefill);
-            println!("\n📄 Template Tasks:");
-            for (i, task) in config.template_task_list().iter().enumerate() {
-                println!("{}. {}", i + 1, task);
+            let tasks = config.template_task_list();
+
+            print_task_summary(&parent, &config, &tasks, "📄 Template Tasks")?;
+
+            if !prompt_confirm()? {
+                println!("❌ Aborted.");
+                return Ok(());
             }
+
+            // TODO: send JIRA API requests here
         }
 
         Commands::New { parent } => {
+            let _token = env::var("JIRA_TOKEN").expect("JIRA_TOKEN environment variable must be set");
             let config = load_config()?;
-            println!("🔗 Parent issue: {parent}");
-            println!("🧩 Server: {}", config.server.url);
-            println!("⚙️  Prefill: {:?}", config.prefill);
-            println!("\n🆕 New Tasks:");
-            for (i, task) in config.new_task_list().iter().enumerate() {
-                println!("{}. {}", i + 1, task);
+            let tasks = config.new_task_list();
+
+            print_task_summary(&parent, &config, &tasks, "🆕 New Tasks")?;
+
+            if !prompt_confirm()? {
+                println!("❌ Aborted.");
+                return Ok(());
             }
+
+            // TODO: send JIRA API requests here
         }
     }
+
     Ok(())
 }
+
+fn print_task_summary(
+    parent: &str,
+    config: &config::JiraConfig,
+    tasks: &[String],
+    title: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    println!("\n🧾 Sub-task preview");
+    println!("🔗 Parent ticket: {parent}");
+
+    if let Some(labels) = &config.prefill.labels {
+        println!("🏷️  Labels: {:?}", labels);
+    }
+
+    if let Some(assignee) = &config.prefill.assignee {
+        println!("👤 Assignee: {}", assignee);
+    }
+
+    println!("\n{title}:");
+    for (i, task) in tasks.iter().enumerate() {
+        println!("  {}. {}", i + 1, task);
+    }
+
+    Ok(())
+}
+
+fn prompt_confirm() -> Result<bool, Box<dyn std::error::Error>> {
+    print!("\n✅ Proceed with creating these sub-tasks? [y/N]: ");
+    io::stdout().flush()?; // flush prompt before reading
+
+    let mut input = String::new();
+    io::stdin().read_line(&mut input)?;
+    let answer = input.trim().to_lowercase();
+
+    Ok(matches!(answer.as_str(), "y" | "yes"))
+}
+
