@@ -24,15 +24,15 @@ Document API usage
 """
 "#;
 
-pub fn init_config() -> Result<(), Box<dyn std::error::Error>> {
+pub fn init_config() -> Result<bool, Box<dyn std::error::Error>> {
     let path = Path::new(".jist.toml");
     if path.exists() {
         println!("⚠️  .jist.toml already exists. Not overwriting.");
-        return Ok(());
+        return Ok(false);
     }
 
     fs::write(path, DEFAULT_CONFIG)?;
-    Ok(())
+    Ok(true)
 }
 
 #[derive(Debug, Deserialize)]
@@ -150,3 +150,4 @@ mod tests {
         );
     }
 }
+
