@@ -6,7 +6,7 @@ use std::env;
 use std::io::{self, Write};
 
 #[derive(Parser)]
-#[command(name = "jist")]
+#[command(name = "jirun")]
 #[command(version = env!("CARGO_PKG_VERSION"))]
 #[command(about = "Generate JIRA sub-tasks from a template with a specified parent")]
 struct Cli {

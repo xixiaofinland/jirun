@@ -1,1 +1,1 @@
-# jist CLI
+# jirun CLI
