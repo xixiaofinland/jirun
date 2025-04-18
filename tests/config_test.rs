@@ -1,5 +1,4 @@
-mod helpers;
-use helpers::*;
+use jirun::test_support::load_sample_config;
 
 #[test]
 fn test_config_parses_correctly() {

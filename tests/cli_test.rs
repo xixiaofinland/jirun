@@ -1,13 +1,12 @@
-mod helpers;
-
 use assert_cmd::Command;
+use jirun::test_support::write_sample_config_and_env;
 use predicates::str::contains;
 use tempfile::tempdir;
 
 #[test]
 fn template_command_prints_tasks_and_aborts_on_no() {
     let dir = tempdir().unwrap();
-    helpers::write_sample_config_and_env(dir.path());
+    write_sample_config_and_env(dir.path());
 
     Command::cargo_bin("jirun")
         .unwrap()
@@ -23,7 +22,7 @@ fn template_command_prints_tasks_and_aborts_on_no() {
 #[test]
 fn template_command_accepts_confirmation_and_proceeds() {
     let dir = tempfile::tempdir().unwrap();
-    helpers::write_sample_config_and_env(dir.path());
+    write_sample_config_and_env(dir.path());
 
     Command::cargo_bin("jirun")
         .unwrap()
@@ -41,7 +40,7 @@ fn template_command_accepts_confirmation_and_proceeds() {
 #[test]
 fn template_command_dry_run_skips_confirmation_and_prints_payload() {
     let dir = tempdir().unwrap();
-    helpers::write_sample_config_and_env(dir.path());
+    write_sample_config_and_env(dir.path());
 
     Command::cargo_bin("jirun")
         .unwrap()

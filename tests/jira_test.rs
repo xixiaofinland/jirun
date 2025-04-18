@@ -1,6 +1,7 @@
-mod helpers;
-use helpers::*;
-use jirun::jira::{build_jira_payload, extract_project_key};
+use jirun::{
+    jira::{build_jira_payload, extract_project_key},
+    test_support::load_sample_config,
+};
 use serde_json::json;
 
 #[test]
