@@ -1,3 +1,5 @@
+use std::env;
+
 use reqwest::blocking::Client;
 use serde_json::{json, to_string_pretty};
 
@@ -44,6 +46,12 @@ pub fn send_subtask(
     );
 
     if diagnose {
+        println!();
+        match env::var("JIRA_TOKEN") {
+            Ok(_) => println!("🔐 Found JIRA_TOKEN in environment"),
+            Err(_) => println!("⚠️  JIRA_TOKEN not set"),
+        }
+
         println!("\n🌐 JIRA endpoint: {url}");
         println!(
             "📦 Constructed JIRA JSON payload:\n{}",

@@ -39,12 +39,13 @@ enum Commands {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    dotenvy::dotenv().ok();
     let cli = Cli::parse();
 
     match cli.command {
         Commands::Init => {
             if init_config()? {
-                println!("✅ Created .jist.toml in current directory.");
+                println!("✅ Created .jirun.toml in current directory.");
             }
             return Ok(());
         }
@@ -52,6 +53,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Commands::Template { parent } => {
             let _token =
                 env::var("JIRA_TOKEN").expect("JIRA_TOKEN environment variable must be set");
+
             let config = load_config()?;
             let tasks = config.template_task_list();
 
@@ -71,6 +73,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Commands::New { parent } => {
             let _token =
                 env::var("JIRA_TOKEN").expect("JIRA_TOKEN environment variable must be set");
+
             let config = load_config()?;
             let tasks = config.new_task_list();
 

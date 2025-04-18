@@ -85,7 +85,7 @@ pub fn load_config() -> Result<JiraConfig, Box<dyn std::error::Error>> {
     let config_path = std::env::current_dir()?.join(".jirun.toml");
     if !config_path.exists() {
         return Err(format!(
-            "❌ Config file not found at {:?}. Run `jist init` to create one.",
+            "❌ Config file not found at {:?}. Run `jirun init` to create one.",
             config_path
         )
         .into());
