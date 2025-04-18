@@ -16,6 +16,6 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}  # or PAT if needed
+          token: ${{ secrets.JIST_PAT }}
           release-type: rust
 
