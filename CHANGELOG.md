@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.5.0](https://github.com/xixiaofinland/jirun/compare/v0.4.0...v0.5.0) (2025-04-18)
+
+
+### Features
+
+* add .env support ([eaf6271](https://github.com/xixiaofinland/jirun/commit/eaf62716b459cd7fbffe0ceadca58b65e8ecd28b))
+* add gh action for code quality guard ([a5a0b28](https://github.com/xixiaofinland/jirun/commit/a5a0b288d64d43c7d20b3ba2611b7d84ea013967))
+* add tests ([41fe9e9](https://github.com/xixiaofinland/jirun/commit/41fe9e9b85abcb82e9bf9e2db6de720780e86e59))
+
 ## [0.4.0](https://github.com/xixiaofinland/jirun/compare/v0.3.0...v0.4.0) (2025-04-18)
 
 
