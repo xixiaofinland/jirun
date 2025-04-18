@@ -40,4 +40,3 @@ pub fn prompt_confirm() -> Result<bool, Box<dyn std::error::Error>> {
 
     Ok(matches!(answer.as_str(), "y" | "yes"))
 }
-

@@ -1,6 +1,6 @@
+mod commands;
 mod config;
 mod jira;
-mod commands;
 mod utils;
 
 use clap::{Parser, Subcommand};

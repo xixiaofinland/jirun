@@ -64,4 +64,3 @@ fn test_invalid_labels_type_fails() {
     let result = toml::from_str::<jirun::config::JiraConfig>(toml);
     assert!(result.is_err(), "Expected error due to invalid labels type");
 }
-

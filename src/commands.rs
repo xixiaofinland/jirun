@@ -49,4 +49,3 @@ pub fn handle_init() -> Result<(), Box<dyn std::error::Error>> {
     }
     Ok(())
 }
-

@@ -1,13 +1,13 @@
 use std::env;
 
-use reqwest::blocking::Client;
+// use reqwest::blocking::Client;
 use serde_json::{json, to_string_pretty};
 
 use crate::config;
 
 pub fn send_subtask(
     config: &config::JiraConfig,
-    token: &str,
+    _token: &str,
     parent_key: &str,
     summary: &str,
     diagnose: bool,
