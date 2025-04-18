@@ -1,3 +1,4 @@
-/target
+.env
 .direnv
 .jirun.toml
+/target
