@@ -1,7 +1,9 @@
 mod config;
+mod jira;
 
 use clap::{Parser, Subcommand};
 use config::{init_config, load_config};
+use jira::send_subtask;
 use std::env;
 use std::io::{self, Write};
 
@@ -10,6 +12,10 @@ use std::io::{self, Write};
 #[command(version = env!("CARGO_PKG_VERSION"))]
 #[command(about = "Generate JIRA sub-tasks from a template with a specified parent")]
 struct Cli {
+    /// Print outgoing JIRA JSON payloads for debugging
+    #[arg(short = 'd', long = "diagnose", global = true)]
+    diagnose: bool,
+
     #[command(subcommand)]
     command: Commands,
 }
@@ -44,33 +50,41 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
 
         Commands::Template { parent } => {
-            let _token = env::var("JIRA_TOKEN").expect("JIRA_TOKEN environment variable must be set");
+            let _token =
+                env::var("JIRA_TOKEN").expect("JIRA_TOKEN environment variable must be set");
             let config = load_config()?;
             let tasks = config.template_task_list();
 
-            print_task_summary(&parent, &config, &tasks, "📄 Template Tasks")?;
-
+            print_task_summary(&parent, &config, &tasks)?;
             if !prompt_confirm()? {
                 println!("❌ Aborted.");
                 return Ok(());
             }
 
-            // TODO: send JIRA API requests here
+            for summary in &tasks {
+                if let Err(err) = send_subtask(&config, &_token, &parent, summary, cli.diagnose) {
+                    eprintln!("{err}");
+                }
+            }
         }
 
         Commands::New { parent } => {
-            let _token = env::var("JIRA_TOKEN").expect("JIRA_TOKEN environment variable must be set");
+            let _token =
+                env::var("JIRA_TOKEN").expect("JIRA_TOKEN environment variable must be set");
             let config = load_config()?;
             let tasks = config.new_task_list();
 
-            print_task_summary(&parent, &config, &tasks, "🆕 New Tasks")?;
-
+            print_task_summary(&parent, &config, &tasks)?;
             if !prompt_confirm()? {
                 println!("❌ Aborted.");
                 return Ok(());
             }
 
-            // TODO: send JIRA API requests here
+            for summary in &tasks {
+                if let Err(err) = send_subtask(&config, &_token, &parent, summary, cli.diagnose) {
+                    eprintln!("{err}");
+                }
+            }
         }
     }
 
@@ -81,23 +95,29 @@ fn print_task_summary(
     parent: &str,
     config: &config::JiraConfig,
     tasks: &[String],
-    title: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    println!("\n🧾 Sub-task preview");
-    println!("🔗 Parent ticket: {parent}");
+    println!("-----");
+    println!("Parent: {parent}");
+    println!();
 
+    println!("Prefill:");
+    println!("-----");
     if let Some(labels) = &config.prefill.labels {
-        println!("🏷️  Labels: {:?}", labels);
+        for label in labels {
+            println!("🏷️  Label: {label}");
+        }
     }
-
     if let Some(assignee) = &config.prefill.assignee {
-        println!("👤 Assignee: {}", assignee);
+        println!("👤 Assignee: {assignee}");
     }
+    println!();
 
-    println!("\n{title}:");
+    println!("Tasks:");
+    println!("-----");
     for (i, task) in tasks.iter().enumerate() {
-        println!("  {}. {}", i + 1, task);
+        println!("{}. {}", i + 1, task);
     }
+    println!();
 
     Ok(())
 }
@@ -112,4 +132,3 @@ fn prompt_confirm() -> Result<bool, Box<dyn std::error::Error>> {
 
     Ok(matches!(answer.as_str(), "y" | "yes"))
 }
-
