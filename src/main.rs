@@ -23,10 +23,16 @@ enum Commands {
     Template {
         #[arg(short = 'p', long = "parent")]
         parent: String,
+
+        #[arg(short = 'a', long = "assignee")]
+        assignee: Option<String>,
     },
     New {
         #[arg(short = 'p', long = "parent")]
         parent: String,
+
+        #[arg(short = 'a', long = "assignee")]
+        assignee: Option<String>,
     },
     Init,
 }
@@ -37,8 +43,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match cli.command {
         Commands::Init => handle_init()?,
-        Commands::Template { parent } => handle_template(parent, cli.diagnose)?,
-        Commands::New { parent } => handle_new(parent, cli.diagnose)?,
+        Commands::Template {
+            parent,
+            assignee: assignee_override,
+        } => handle_template(parent, assignee_override.as_deref(), cli.diagnose)?,
+        Commands::New {
+            parent,
+            assignee: assignee_override,
+        } => handle_new(parent, assignee_override.as_deref(), cli.diagnose)?,
     }
 
     Ok(())
