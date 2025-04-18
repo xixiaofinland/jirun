@@ -1,7 +1,5 @@
-use std::env;
-
 // use reqwest::blocking::Client;
-use serde_json::{json, to_string_pretty, Value};
+use serde_json::{json, Value};
 
 use crate::config::JiraConfig;
 
@@ -11,27 +9,29 @@ pub fn send_subtask(
     parent_key: &str,
     summary: &str,
     assignee_override: Option<&str>,
-    diagnose: bool,
+    dry_run: bool,
+    dry_run_header_printed: &mut bool,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let body = build_jira_payload(config, parent_key, summary, assignee_override);
 
-    let url = format!(
-        "{}/rest/api/2/issue/",
-        config.server.url.trim_end_matches('/')
-    );
-
-    if diagnose {
-        println!();
-        match env::var("JIRA_TOKEN") {
-            Ok(_) => println!("🔐 Found JIRA_TOKEN in environment"),
-            Err(_) => println!("⚠️  JIRA_TOKEN not set"),
+    if dry_run {
+        if !*dry_run_header_printed {
+            println!("🌐 Server: {}", config.server.url);
+            println!(
+                "🔗 API: {}/rest/api/2/issue/",
+                config.server.url.trim_end_matches('/')
+            );
+            println!();
+            *dry_run_header_printed = true;
         }
 
-        println!("\n🌐 JIRA endpoint: {url}");
         println!(
-            "📦 Constructed JIRA JSON payload:\n{}",
-            to_string_pretty(&body)?
+            "📦 Dry-run: would send this payload for sub-task '{}':",
+            summary
         );
+        println!("{}", serde_json::to_string_pretty(&body)?);
+        println!();
+        return Ok(());
     }
 
     // let res = client
