@@ -55,7 +55,7 @@ jobs:
           cargo clippy --all-targets --all-features -- -D warnings
 
   tests:
-    name: Unit Tests (with coverage)
+    name: Unit Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -74,20 +74,7 @@ jobs:
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
-        with:
-          components: clippy, rustfmt
 
-      - name: Install cargo-tarpaulin
-        uses: baptiste0928/cargo-install@v3
-        with:
-          crate: cargo-tarpaulin
+      - name: Run Unit Tests
+        run: cargo test --all
 
-      - name: Run Tests with Coverage
-        run: |
-          cargo tarpaulin --out Xml --output-dir coverage.xml --verbose
-
-      - name: Upload Coverage Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage.xml
