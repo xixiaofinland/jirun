@@ -4,18 +4,19 @@ use std::env;
 pub fn handle_template(
     parent: String,
     assignee_override: Option<&str>,
-    diagnose: bool,
+    dry_run: bool,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let token = env::var("JIRA_TOKEN").expect("JIRA_TOKEN environment variable must be set");
     let config = config::load_config()?;
     let tasks = config.template_task_list();
 
     utils::print_task_summary(&parent, &config, &tasks, assignee_override)?;
-    if !utils::prompt_confirm()? {
+    if !dry_run && !utils::prompt_confirm()? {
         println!("❌ Aborted.");
         return Ok(());
     }
 
+    let mut dry_run_header_printed = false;
     for summary in &tasks {
         if let Err(err) = jira::send_subtask(
             &config,
@@ -23,10 +24,15 @@ pub fn handle_template(
             &parent,
             summary,
             assignee_override,
-            diagnose,
+            dry_run,
+            &mut dry_run_header_printed,
         ) {
             eprintln!("{err}");
         }
+    }
+
+    if dry_run {
+        println!("🚫 Dry-run: no requests were sent.");
     }
 
     Ok(())
@@ -35,18 +41,19 @@ pub fn handle_template(
 pub fn handle_new(
     parent: String,
     assignee_override: Option<&str>,
-    diagnose: bool,
+    dry_run: bool,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let token = env::var("JIRA_TOKEN").expect("JIRA_TOKEN environment variable must be set");
     let config = config::load_config()?;
     let tasks = config.new_task_list();
 
     utils::print_task_summary(&parent, &config, &tasks, assignee_override)?;
-    if !utils::prompt_confirm()? {
+    if !dry_run || !utils::prompt_confirm()? {
         println!("❌ Aborted.");
         return Ok(());
     }
 
+    let mut dry_run_header_printed = false;
     for summary in &tasks {
         if let Err(err) = jira::send_subtask(
             &config,
@@ -54,10 +61,15 @@ pub fn handle_new(
             &parent,
             summary,
             assignee_override,
-            diagnose,
+            dry_run,
+            &mut dry_run_header_printed,
         ) {
             eprintln!("{err}");
         }
+    }
+
+    if dry_run {
+        println!("🚫 Dry-run: no requests were sent.");
     }
 
     Ok(())
