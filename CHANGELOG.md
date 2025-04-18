@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/xixiaofinland/jirun/compare/v0.3.0...v0.4.0) (2025-04-18)
+
+
+### Features
+
+* fix gh action due to rename to jirun ([b75790a](https://github.com/xixiaofinland/jirun/commit/b75790a84fb2e3d4eca467e485b57534a27a3d06))
+* update summary info; add -d flag ([2d220d0](https://github.com/xixiaofinland/jirun/commit/2d220d075bf05928859717188d56a09a3c931064))
+
 ## [0.3.0](https://github.com/xixiaofinland/jirun/compare/v0.2.0...v0.3.0) (2025-04-18)
 
 
