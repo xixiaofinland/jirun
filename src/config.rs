@@ -25,9 +25,9 @@ Document API usage
 "#;
 
 pub fn init_config() -> Result<bool, Box<dyn std::error::Error>> {
-    let path = Path::new(".jist.toml");
+    let path = Path::new(".jirun.toml");
     if path.exists() {
-        println!("⚠️  .jist.toml already exists. Not overwriting.");
+        println!("⚠️  .jirun.toml already exists. Not overwriting.");
         return Ok(false);
     }
 
