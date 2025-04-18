@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/xixiaofinland/jirun/compare/v0.2.0...v0.3.0) (2025-04-18)
+
+
+### Features
+
+* github action publish to crates.io ([08ce041](https://github.com/xixiaofinland/jirun/commit/08ce0414f463f6f026cb5e34a476591cfd31c03e))
+
 ## [0.2.0](https://github.com/xixiaofinland/jirar/compare/v0.1.0...v0.2.0) (2025-04-18)
 
 
