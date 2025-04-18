@@ -1,6 +1,16 @@
 use jirun::config::JiraConfig;
+use std::fs;
 
-pub fn sample_config_toml() -> &'static str {
+pub fn write_sample_config_and_env(dir: &std::path::Path) {
+    fs::write(dir.join(".jirun.toml"), sample_config_toml()).unwrap();
+    fs::write(dir.join(".env"), "JIRA_TOKEN=dummy-token\n").unwrap();
+}
+
+pub fn load_sample_config() -> JiraConfig {
+    toml::from_str(sample_config_toml()).expect("Failed to parse sample config")
+}
+
+fn sample_config_toml() -> &'static str {
     r#"[server]
         url = "https://yourcompany.atlassian.net"
 
@@ -19,8 +29,4 @@ pub fn sample_config_toml() -> &'static str {
         Task D
         """
     "#
-}
-
-pub fn load_sample_config() -> JiraConfig {
-    toml::from_str(sample_config_toml()).expect("Failed to parse sample config")
 }

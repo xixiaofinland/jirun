@@ -11,8 +11,9 @@ use commands::{handle_init, handle_new, handle_template};
 #[command(version = env!("CARGO_PKG_VERSION"))]
 #[command(about = "Generate JIRA sub-tasks from a template with a specified parent")]
 struct Cli {
-    #[arg(short = 'd', long = "diagnose", global = true)]
-    diagnose: bool,
+    /// Prevent actual sub-task creation (dry-run mode)
+    #[arg(short = 'd', long = "dry-run", global = true)]
+    dry_run: bool,
 
     #[command(subcommand)]
     command: Commands,
@@ -46,11 +47,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Commands::Template {
             parent,
             assignee: assignee_override,
-        } => handle_template(parent, assignee_override.as_deref(), cli.diagnose)?,
+        } => handle_template(parent, assignee_override.as_deref(), cli.dry_run)?,
         Commands::New {
             parent,
             assignee: assignee_override,
-        } => handle_new(parent, assignee_override.as_deref(), cli.diagnose)?,
+        } => handle_new(parent, assignee_override.as_deref(), cli.dry_run)?,
     }
 
     Ok(())
