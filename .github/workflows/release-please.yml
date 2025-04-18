@@ -1,0 +1,21 @@
+name: release-please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    name: release-please
+    steps:
+      - uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # or PAT if needed
+          release-type: rust
+
