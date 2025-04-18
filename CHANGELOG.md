@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/xixiaofinland/jirun/compare/v0.5.0...v0.6.0) (2025-04-18)
+
+
+### Features
+
+* add -a flag to override assignee ([b035966](https://github.com/xixiaofinland/jirun/commit/b035966355c8486847f84282517072eb94619e4a))
+
 ## [0.5.0](https://github.com/xixiaofinland/jirun/compare/v0.4.0...v0.5.0) (2025-04-18)
 
 
