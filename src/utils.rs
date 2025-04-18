@@ -5,6 +5,7 @@ pub fn print_task_summary(
     parent: &str,
     config: &JiraConfig,
     tasks: &[String],
+    assignee_override: Option<&str>,
 ) -> Result<(), Box<dyn std::error::Error>> {
     println!("-----");
     println!("Parent: {parent}\n");
@@ -16,8 +17,10 @@ pub fn print_task_summary(
             println!("🏷️  Label: {label}");
         }
     }
-    if let Some(assignee) = &config.prefill.assignee {
-        println!("👤 Assignee: {assignee}");
+    if let Some(assignee) = assignee_override.or(config.prefill.assignee.as_deref()) {
+        println!("👤 Assignee: {assignee} (effective)");
+    } else {
+        println!("👤 Assignee: (none)");
     }
 
     println!("\nTasks:");

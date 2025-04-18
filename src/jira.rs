@@ -1,44 +1,19 @@
 use std::env;
 
 // use reqwest::blocking::Client;
-use serde_json::{json, to_string_pretty};
+use serde_json::{json, to_string_pretty, Value};
 
-use crate::config;
+use crate::config::JiraConfig;
 
 pub fn send_subtask(
-    config: &config::JiraConfig,
+    config: &JiraConfig,
     _token: &str,
     parent_key: &str,
     summary: &str,
+    assignee_override: Option<&str>,
     diagnose: bool,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let project_key = parent_key
-        .split('-')
-        .next()
-        .filter(|s| !s.is_empty())
-        .ok_or_else(|| format!("❌ Invalid parent issue key: '{parent_key}'"))?;
-
-    let mut fields = json!({
-        "project": { "key": project_key },
-        "parent": { "key": parent_key },
-        "summary": summary,
-        "issuetype": { "name": "Sub-task" }
-    });
-
-    if let Some(labels) = &config.prefill.labels {
-        fields["labels"] = serde_json::Value::Array(
-            labels
-                .iter()
-                .map(|s| serde_json::Value::String(s.clone()))
-                .collect(),
-        );
-    }
-
-    if let Some(assignee) = &config.prefill.assignee {
-        fields["assignee"] = json!({ "name": assignee });
-    }
-
-    let body = json!({ "fields": fields });
+    let body = build_jira_payload(config, parent_key, summary, assignee_override);
 
     let url = format!(
         "{}/rest/api/2/issue/",
@@ -81,4 +56,38 @@ pub fn send_subtask(
     //     Err(format!("❌ Failed to create sub-task: {status}\n{err_text}").into())
     // }
     Ok(())
+}
+
+pub fn build_jira_payload(
+    config: &JiraConfig,
+    parent_key: &str,
+    summary: &str,
+    assignee_override: Option<&str>,
+) -> Value {
+    let project_key = extract_project_key(parent_key);
+
+    let mut fields = json!({
+        "project": { "key": project_key },
+        "parent": { "key": parent_key },
+        "summary": summary,
+        "issuetype": { "name": "Sub-task" }
+    });
+
+    if let Some(labels) = &config.prefill.labels {
+        fields["labels"] = json!(labels);
+    }
+
+    if let Some(assignee) = assignee_override.or(config.prefill.assignee.as_deref()) {
+        fields["assignee"] = json!({ "name": assignee });
+    }
+
+    json!({ "fields": fields })
+}
+
+pub fn extract_project_key(parent_key: &str) -> &str {
+    parent_key
+        .split('-')
+        .next()
+        .filter(|s| !s.is_empty())
+        .unwrap_or("UNKNOWN")
 }
