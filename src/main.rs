@@ -4,7 +4,8 @@ mod jira;
 mod utils;
 
 use clap::{Parser, Subcommand};
-use commands::{handle_init, handle_new, handle_template};
+use commands::{handle_init, handle_subtask_command};
+use config::JiraConfig;
 
 #[derive(Parser)]
 #[command(name = "jirun")]
@@ -47,11 +48,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Commands::Template {
             parent,
             assignee: assignee_override,
-        } => handle_template(parent, assignee_override.as_deref(), cli.dry_run)?,
+        } => handle_subtask_command(
+            parent,
+            assignee_override.as_deref(),
+            cli.dry_run,
+            JiraConfig::template_task_list,
+        )?,
         Commands::New {
             parent,
             assignee: assignee_override,
-        } => handle_new(parent, assignee_override.as_deref(), cli.dry_run)?,
+        } => handle_subtask_command(
+            parent,
+            assignee_override.as_deref(),
+            cli.dry_run,
+            JiraConfig::new_task_list,
+        )?,
     }
 
     Ok(())
