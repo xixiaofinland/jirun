@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/xixiaofinland/jirar/compare/v0.1.0...v0.2.0) (2025-04-18)
+
+
+### Features
+
+* add summary and confirm ([9534296](https://github.com/xixiaofinland/jirar/commit/9534296b209f8d7f88ddb7a08939eada3a912c17))
+
 ## 0.1.0 (2025-04-18)
 
 
