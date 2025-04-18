@@ -22,7 +22,7 @@ pub fn handle_template(
             &token,
             &parent,
             summary,
-            assignee_override.as_deref(),
+            assignee_override,
             diagnose,
         ) {
             eprintln!("{err}");
