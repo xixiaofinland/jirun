@@ -2,6 +2,8 @@
 name = "jirun"
 version = "0.3.0"
 edition = "2021"
+description = "A Cli Generating JIRA sub-tasks from a template with a specified parent"
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 clap = { version = "4.5.36", features = ["derive"] }
