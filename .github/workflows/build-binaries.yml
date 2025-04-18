@@ -59,7 +59,7 @@ jobs:
       - name: Build archive
         shell: bash
         run: |
-          binary_name="jist"
+          binary_name="jirun"
           artifact_base="${binary_name}-${{ env.VERSION }}-${{ matrix.artifact_name }}"
 
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
