@@ -25,14 +25,31 @@ Document API usage
 "#;
 
 pub fn init_config() -> Result<bool, Box<dyn std::error::Error>> {
-    let path = Path::new(".jirun.toml");
-    if path.exists() {
+    let config_path = Path::new(".jirun.toml");
+    let env_path = Path::new(".env");
+
+    let mut created_any = false;
+
+    if config_path.exists() {
         println!("⚠️  .jirun.toml already exists. Not overwriting.");
-        return Ok(false);
+    } else {
+        fs::write(config_path, DEFAULT_CONFIG)?;
+        println!("✅ Created .jirun.toml");
+        created_any = true;
     }
 
-    fs::write(path, DEFAULT_CONFIG)?;
-    Ok(true)
+    if env_path.exists() {
+        println!("⚠️  .env already exists. Not overwriting.");
+    } else {
+        fs::write(
+            env_path,
+            "# JIRA API token (used by jirun)\nJIRA_TOKEN=your-api-token-here\n",
+        )?;
+        println!("✅ Created .env (with placeholder JIRA_TOKEN)");
+        created_any = true;
+    }
+
+    Ok(created_any)
 }
 
 #[derive(Debug, Deserialize)]
