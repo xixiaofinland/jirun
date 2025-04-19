@@ -1,7 +1,6 @@
 mod commands;
 mod config;
 mod jira;
-mod utils;
 
 use clap::{Parser, Subcommand};
 use commands::{handle_init, handle_subtask_command};
@@ -45,21 +44,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match cli.command {
         Commands::Init => handle_init()?,
-        Commands::Template {
+        Commands::Template { parent, assignee } => handle_subtask_command(
             parent,
-            assignee: assignee_override,
-        } => handle_subtask_command(
-            parent,
-            assignee_override.as_deref(),
+            assignee.as_deref(),
             cli.dry_run,
             JiraConfig::template_task_list,
         )?,
-        Commands::New {
+        Commands::New { parent, assignee } => handle_subtask_command(
             parent,
-            assignee: assignee_override,
-        } => handle_subtask_command(
-            parent,
-            assignee_override.as_deref(),
+            assignee.as_deref(),
             cli.dry_run,
             JiraConfig::new_task_list,
         )?,
