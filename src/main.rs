@@ -12,7 +12,23 @@ use config::JiraConfig;
 #[derive(Parser)]
 #[command(name = "jirun")]
 #[command(version = env!("CARGO_PKG_VERSION"))]
-#[command(about = "Generate JIRA sub-tasks from a template with a specified parent")]
+#[command(
+    about = "Generate JIRA sub-tasks from a template with a specified parent",
+    long_about = None,
+    after_help = "\
+Examples:
+  1. jirun init --global
+     Create .jirun.toml and .env in ~/.config/jirun/
+
+  2. jirun template --parent PROJ-123
+     Use [sub_tasks.template_tasks] to create sub-tasks under PROJ-123
+
+  3. jirun new --parent PROJ-123 --assignee alice
+     Use [sub_tasks.new_tasks], overriding assignee with 'alice'
+
+  4. jirun template -p PROJ-123 --dry-run
+     Show request payloads without sending to JIRA"
+)]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
