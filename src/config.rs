@@ -50,42 +50,56 @@ pub struct JiraConfig {
 }
 
 impl JiraConfig {
-    pub fn init(global: bool) -> Result<bool, Box<dyn Error>> {
-        let (config_path, env_path) = if global {
-            let base = dirs::config_dir()
-                .ok_or("❌ Could not determine config directory (XDG_CONFIG_HOME)")?
-                .join("jirun");
-            std::fs::create_dir_all(&base)?;
-            (base.join("config.toml"), base.join(".env"))
-        } else {
-            (
-                Path::new(".jirun.toml").to_path_buf(),
-                Path::new(".env").to_path_buf(),
-            )
-        };
+    pub fn init_local() {
+        let config_path = Path::new(".jirun.toml").to_path_buf();
+        let env_path = Path::new(".env").to_path_buf();
+        Self::init_at(config_path, env_path, "./");
+    }
 
-        let mut created_any = false;
+    pub fn init_global() {
+        let base = dirs::config_dir()
+            .expect("❌ Could not determine config directory (XDG_CONFIG_HOME)")
+            .join("jirun");
+        fs::create_dir_all(&base).expect("❌ Failed to create config directory");
 
+        println!("📁 Global config path: {}\n", base.display());
+
+        let config_path = base.join(".jirun.toml");
+        let env_path = base.join(".env");
+
+        Self::init_at(config_path, env_path, "");
+    }
+
+    fn init_at(config_path: PathBuf, env_path: PathBuf, local_prefix: &str) {
         if config_path.exists() {
-            println!("⚠️  .jirun.toml already exists. Not overwriting.");
+            println!(
+                "⚠️  Config file already exists: {}{}",
+                local_prefix,
+                config_path.display()
+            );
         } else {
-            fs::write(config_path, DEFAULT_CONFIG)?;
-            println!("✅ Created .jirun.toml");
-            created_any = true;
+            fs::write(&config_path, DEFAULT_CONFIG).expect("❌ Failed to write config file");
+            println!(
+                "✅ Created config file: {}{}",
+                local_prefix,
+                config_path.display()
+            );
         }
 
         if env_path.exists() {
-            println!("⚠️  .env already exists. Not overwriting.");
+            println!(
+                "⚠️  .env file already exists: {}{}",
+                local_prefix,
+                env_path.display()
+            );
         } else {
             fs::write(
-                env_path,
+                &env_path,
                 "# JIRA API token (used by jirun)\nJIRA_TOKEN=your-api-token-here\n",
-            )?;
-            println!("✅ Created .env (with placeholder JIRA_TOKEN)");
-            created_any = true;
+            )
+            .expect("❌ Failed to write .env file");
+            println!("✅ Created .env: {}{}", local_prefix, env_path.display());
         }
-
-        Ok(created_any)
     }
 
     pub fn load() -> Result<Self, Box<dyn Error>> {
