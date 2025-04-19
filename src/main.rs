@@ -38,7 +38,7 @@ struct Cli {
 enum Commands {
     /// Create .jirun.toml and .env (defaults to local directory)
     Init {
-        /// Write to global config dir (e.g. ~/.config/jirun/)
+        /// Write to global config directory (Linux: ~/.config/jirun/, macOS: ~/Library/Application Support/jirun/, Windows: %APPDATA%\jirun\)
         #[arg(long = "global")]
         global: bool,
     },
@@ -79,7 +79,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::Init { global } => handle_init(global)?,
+        Commands::Init { global } => handle_init(global),
         Commands::Template {
             parent,
             assignee,

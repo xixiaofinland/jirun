@@ -71,13 +71,12 @@ fn print_dry_run_summary(
     Ok(())
 }
 
-pub fn handle_init(global: bool) -> Result<(), Box<dyn Error>> {
-    if JiraConfig::init(global)? {
-        println!("\n✨ Init complete.");
+pub fn handle_init(global: bool) {
+    if global {
+        JiraConfig::init_global()
     } else {
-        println!("\nℹ️ Nothing to do — config and .env already exist.");
+        JiraConfig::init_local()
     }
-    Ok(())
 }
 
 fn print_task_summary(
