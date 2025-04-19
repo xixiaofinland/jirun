@@ -49,21 +49,22 @@ fn print_dry_run_summary(
     tasks: &[String],
     assignee_override: Option<&str>,
 ) -> Result<(), Box<dyn Error>> {
-    println!("🌐 Server: {}", config.server.url);
     println!(
         "🔗 API: {}/rest/api/2/issue/",
         config.server.url.trim_end_matches('/')
     );
     println!();
 
-    for summary in tasks {
-        let body = build_jira_payload(config, parent, summary, assignee_override);
+    for (i, summary) in tasks.iter().enumerate() {
+        let display_summary = truncate_with_ellipsis(summary, 20);
         println!(
-            "📦 Dry-run: would send this payload for sub-task '{}':",
-            summary
+            "📦 Dry-run: would send this payload for sub-task #{}: '{}'",
+            i + 1,
+            display_summary
         );
-        println!("{}", to_string_pretty(&body)?);
-        println!();
+
+        let body = build_jira_payload(config, parent, summary, assignee_override);
+        println!("{}\n", to_string_pretty(&body)?);
     }
 
     println!("🚫 Dry-run: no requests were sent.");
@@ -84,7 +85,7 @@ fn print_task_summary(
     config: &JiraConfig,
     tasks: &[String],
     assignee: Option<&str>,
-) -> Result<(), Box<dyn std::error::Error>> {
+) -> Result<(), Box<dyn Error>> {
     println!("-----");
     println!("Parent: {parent}\n");
 
@@ -111,7 +112,7 @@ fn print_task_summary(
     Ok(())
 }
 
-fn prompt_confirm() -> Result<bool, Box<dyn std::error::Error>> {
+fn prompt_confirm() -> Result<bool, Box<dyn Error>> {
     print!("\n✅ Proceed with creating these sub-tasks? [y/N]: ");
     io::stdout().flush()?;
 
@@ -120,4 +121,15 @@ fn prompt_confirm() -> Result<bool, Box<dyn std::error::Error>> {
     let answer = input.trim().to_lowercase();
 
     Ok(matches!(answer.as_str(), "y" | "yes"))
+}
+
+fn truncate_with_ellipsis(text: &str, max_chars: usize) -> String {
+    let mut chars = text.chars();
+    let truncated: String = chars.by_ref().take(max_chars).collect();
+
+    if chars.next().is_some() {
+        format!("{}...", truncated)
+    } else {
+        truncated
+    }
 }

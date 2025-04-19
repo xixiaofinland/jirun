@@ -1,4 +1,5 @@
 use serde::Deserialize;
+use std::error::Error;
 use std::fs;
 use std::path::Path;
 use std::path::PathBuf;
@@ -49,7 +50,7 @@ pub struct JiraConfig {
 }
 
 impl JiraConfig {
-    pub fn init(global: bool) -> Result<bool, Box<dyn std::error::Error>> {
+    pub fn init(global: bool) -> Result<bool, Box<dyn Error>> {
         let (config_path, env_path) = if global {
             let base = dirs::config_dir()
                 .ok_or("❌ Could not determine config directory (XDG_CONFIG_HOME)")?
@@ -87,7 +88,7 @@ impl JiraConfig {
         Ok(created_any)
     }
 
-    pub fn load() -> Result<Self, Box<dyn std::error::Error>> {
+    pub fn load() -> Result<Self, Box<dyn Error>> {
         let config_path = Self::config_locations()
             .into_iter()
             .find(|p| p.exists())
