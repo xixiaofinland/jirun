@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.0](https://github.com/xixiaofinland/jirun/compare/v0.9.0...v0.10.0) (2025-04-19)
+
+
+### Features
+
+* detect duplicate task(s) ([b91de12](https://github.com/xixiaofinland/jirun/commit/b91de1232f19de0f383fe1a6c22b524af31f3029))
+* duplicate task in red and in same list ([b91de12](https://github.com/xixiaofinland/jirun/commit/b91de1232f19de0f383fe1a6c22b524af31f3029))
+
 ## [0.9.0](https://github.com/xixiaofinland/jirun/compare/v0.8.0...v0.9.0) (2025-04-19)
 
 
