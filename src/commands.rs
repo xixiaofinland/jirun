@@ -1,12 +1,12 @@
-use serde_json::to_string_pretty;
-use std::{
-    error::Error,
-    io::{self, Write},
-};
-
 use crate::{
     config::JiraConfig,
     jira::{build_jira_payload, send_subtask},
+};
+use reqwest::blocking::Client;
+use serde_json::{to_string_pretty, Value};
+use std::{
+    error::Error,
+    io::{self, Write},
 };
 
 pub fn handle_subtask_command<F>(
@@ -22,7 +22,7 @@ where
     let config = JiraConfig::load()?;
     let tasks = select_tasks(&config);
 
-    print_task_summary(&parent, &config, &tasks, assignee)?;
+    print_task_summary(&parent, &config, &tasks, assignee, &token)?;
 
     if dry_run {
         print_dry_run_summary(&config, &parent, &tasks, assignee)?;
@@ -49,11 +49,7 @@ fn print_dry_run_summary(
     tasks: &[String],
     assignee_override: Option<&str>,
 ) -> Result<(), Box<dyn Error>> {
-    println!(
-        "🔗 API: {}/rest/api/2/issue/",
-        config.server.url.trim_end_matches('/')
-    );
-    println!();
+    println!("🔗 API: {}\n", config.get_api_url());
 
     for (i, summary) in tasks.iter().enumerate() {
         let display_summary = truncate_with_ellipsis(summary, 20);
@@ -84,27 +80,45 @@ fn print_task_summary(
     config: &JiraConfig,
     tasks: &[String],
     assignee: Option<&str>,
+    token: &str,
 ) -> Result<(), Box<dyn Error>> {
-    println!("-----");
-    println!("Parent: {parent}\n");
+    let client = Client::new();
+    let parent_url = format!("{}/{}", config.get_api_url(), parent);
 
-    println!("Prefill:");
-    println!("-----");
-    if let Some(labels) = &config.prefill.labels {
-        for label in labels {
-            println!("🏷️  Label: {label}");
-        }
-    }
-    if let Some(assignee) = assignee.or(config.prefill.assignee.as_deref()) {
-        println!("👤 Assignee: {assignee}");
-    } else {
-        println!("👤 Assignee: (none)");
-    }
+    let res = client
+        .get(&parent_url)
+        .bearer_auth(token)
+        .header("Accept", "application/json")
+        .send()?;
 
-    println!("\nTasks:");
+    let json: Value = res.json()?;
+    let parent_summary = json["fields"]["summary"]
+        .as_str()
+        .unwrap_or("<unknown summary>");
+    let parent_summary = truncate_with_ellipsis(parent_summary, 50);
+
+    println!("\n{}", bold_yellow("Parent:"));
+    println!("-----");
+    println!("🔗 {} — '{}'", parent, bold_cyan(&parent_summary));
+
+    println!("\n{}", bold_yellow("Tasks:"));
     println!("-----");
     for (i, task) in tasks.iter().enumerate() {
         println!("{}. {}", i + 1, task);
+    }
+
+    println!("\n{}", bold_yellow("Prefill:"));
+    println!("-----");
+
+    if let Some(labels) = &config.prefill.labels {
+        let joined = labels.join(", ");
+        println!("🏷️  Labels: {joined}");
+    }
+
+    if let Some(name) = assignee.or(config.prefill.assignee.as_deref()) {
+        println!("👤 Assignee: {name}");
+    } else {
+        println!("👤 Assignee: (none)");
     }
     println!();
 
@@ -131,4 +145,12 @@ fn truncate_with_ellipsis(text: &str, max_chars: usize) -> String {
     } else {
         truncated
     }
+}
+
+fn bold_yellow(text: &str) -> String {
+    format!("\x1b[1;33m{}\x1b[0m", text)
+}
+
+fn bold_cyan(text: &str) -> String {
+    format!("\x1b[1;36m{}\x1b[0m", text)
 }
