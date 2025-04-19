@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/xixiaofinland/jirun/compare/v0.7.0...v0.8.0) (2025-04-19)
+
+
+### Features
+
+* support global config location ([136abb7](https://github.com/xixiaofinland/jirun/commit/136abb72730d3b2f9f5a87acb121d33f6e580edd))
+
 ## [0.7.0](https://github.com/xixiaofinland/jirun/compare/v0.6.0...v0.7.0) (2025-04-18)
 
 
