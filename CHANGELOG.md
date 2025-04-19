@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.0](https://github.com/xixiaofinland/jirun/compare/v0.8.0...v0.9.0) (2025-04-19)
+
+
+### Features
+
+* add examples in help ([bdf6f2c](https://github.com/xixiaofinland/jirun/commit/bdf6f2c892117561358b63d420c1f2bd95da7a03))
+* real JIRA api call ([b05f107](https://github.com/xixiaofinland/jirun/commit/b05f107de42f9d169ed295e76c68eee2c79ac033))
+
 ## [0.8.0](https://github.com/xixiaofinland/jirun/compare/v0.7.0...v0.8.0) (2025-04-19)
 
 
