@@ -1,7 +1,6 @@
 // use reqwest::blocking::Client;
-use serde_json::{json, Value};
-
 use crate::config::JiraConfig;
+use serde_json::{json, Value};
 
 pub fn send_subtask(
     config: &JiraConfig,
