@@ -3,6 +3,8 @@ mod config;
 mod env;
 mod jira;
 
+use std::error::Error;
+
 use clap::{Parser, Subcommand};
 use commands::{handle_init, handle_subtask_command};
 use config::JiraConfig;
@@ -56,7 +58,7 @@ enum Commands {
     },
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     env::try_load_dotenv();
     let cli = Cli::parse();
 

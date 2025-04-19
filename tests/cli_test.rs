@@ -49,7 +49,7 @@ fn template_command_dry_run_skips_confirmation_and_prints_payload() {
         .assert()
         .success()
         .stdout(contains(
-            "Dry-run: would send this payload for sub-task 'Task A'",
+            "Dry-run: would send this payload for sub-task #1: 'Task A'",
         ))
         .stdout(contains("https://yourcompany.atlassian.net"))
         .stdout(contains("Parent: PROJ-123"))
