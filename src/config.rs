@@ -107,7 +107,9 @@ impl JiraConfig {
             .collect()
     }
 
-    pub fn get_api_url(&self) -> String {
+    //TODO: Clippy bug? It warns despite it's being used
+    #[allow(dead_code)]
+    pub fn api_url(&self) -> String {
         format!("{}/rest/api/2/issue", self.server.url.trim_end_matches('/'))
     }
 
