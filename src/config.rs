@@ -8,7 +8,7 @@ const DEFAULT_CONFIG: &str = r#"[server]
 url = "https://yourcompany.atlassian.net"
 
 [prefill]
-labels = ["cli"]
+labels = ["cli", "salesforce"]
 assignee = "john.doe"
 
 [sub_tasks]
@@ -70,38 +70,6 @@ impl JiraConfig {
         Self::init_at(config_path, env_path, "");
     }
 
-    fn init_at(config_path: PathBuf, env_path: PathBuf, local_prefix: &str) {
-        if config_path.exists() {
-            println!(
-                "⚠️  Config file already exists: {}{}",
-                local_prefix,
-                config_path.display()
-            );
-        } else {
-            fs::write(&config_path, DEFAULT_CONFIG).expect("❌ Failed to write config file");
-            println!(
-                "✅ Created config file: {}{}",
-                local_prefix,
-                config_path.display()
-            );
-        }
-
-        if env_path.exists() {
-            println!(
-                "⚠️  .env file already exists: {}{}",
-                local_prefix,
-                env_path.display()
-            );
-        } else {
-            fs::write(
-                &env_path,
-                "# JIRA API token (used by jirun)\nJIRA_TOKEN=your-api-token-here\n",
-            )
-            .expect("❌ Failed to write .env file");
-            println!("✅ Created .env: {}{}", local_prefix, env_path.display());
-        }
-    }
-
     pub fn load() -> Result<Self, Box<dyn Error>> {
         let config_path = Self::config_locations()
             .into_iter()
@@ -137,6 +105,42 @@ impl JiraConfig {
             .filter(|line| !line.is_empty())
             .map(String::from)
             .collect()
+    }
+
+    pub fn get_api_url(&self) -> String {
+        format!("{}/rest/api/2/issue", self.server.url.trim_end_matches('/'))
+    }
+
+    fn init_at(config_path: PathBuf, env_path: PathBuf, local_prefix: &str) {
+        if config_path.exists() {
+            println!(
+                "⚠️  Config file already exists: {}{}",
+                local_prefix,
+                config_path.display()
+            );
+        } else {
+            fs::write(&config_path, DEFAULT_CONFIG).expect("❌ Failed to write config file");
+            println!(
+                "✅ Created config file: {}{}",
+                local_prefix,
+                config_path.display()
+            );
+        }
+
+        if env_path.exists() {
+            println!(
+                "⚠️  .env file already exists: {}{}",
+                local_prefix,
+                env_path.display()
+            );
+        } else {
+            fs::write(
+                &env_path,
+                "# JIRA API token (used by jirun)\nJIRA_TOKEN=your-api-token-here\n",
+            )
+            .expect("❌ Failed to write .env file");
+            println!("✅ Created .env: {}{}", local_prefix, env_path.display());
+        }
     }
 
     fn config_locations() -> Vec<PathBuf> {

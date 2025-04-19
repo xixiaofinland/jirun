@@ -1,6 +1,7 @@
-// use reqwest::blocking::Client;
 use crate::config::JiraConfig;
-use serde_json::{json, Value};
+use reqwest::blocking::Client;
+use reqwest::header::CONTENT_TYPE;
+use serde_json::{json, Map, Value};
 
 pub fn send_subtask(
     config: &JiraConfig,
@@ -15,18 +16,18 @@ pub fn send_subtask(
         "{}/rest/api/2/issue/",
         config.server.url.trim_end_matches('/')
     );
-    let client = reqwest::blocking::Client::new();
 
+    let client = Client::new();
     let res = client
         .post(&url)
         .bearer_auth(token)
-        .header("Content-Type", "application/json")
+        .header(CONTENT_TYPE, "application/json")
         .json(&body)
         .send()?;
 
     let status = res.status();
     if status.is_success() {
-        let json: serde_json::Value = res.json()?;
+        let json: Value = res.json()?;
         let key = json["key"]
             .as_str()
             .ok_or_else(|| format!("❌ JIRA response missing 'key':\n{}", json))?;
@@ -44,24 +45,25 @@ pub fn build_jira_payload(
     summary: &str,
     assignee_override: Option<&str>,
 ) -> Value {
-    let project_key = extract_project_key(parent_key);
+    let mut fields = Map::new();
 
-    let mut fields = json!({
-        "project": { "key": project_key },
-        "parent": { "key": parent_key },
-        "summary": summary,
-        "issuetype": { "name": "Sub-task" }
-    });
+    fields.insert("summary".into(), json!(summary));
+    fields.insert(
+        "project".into(),
+        json!({ "key": extract_project_key(parent_key) }),
+    );
+    fields.insert("parent".into(), json!({ "key": parent_key }));
+    fields.insert("issuetype".into(), json!({ "name": "Sub-task" }));
 
     if let Some(labels) = &config.prefill.labels {
-        fields["labels"] = json!(labels);
+        fields.insert("labels".into(), json!(labels));
     }
 
     if let Some(assignee) = assignee_override.or(config.prefill.assignee.as_deref()) {
-        fields["assignee"] = json!({ "name": assignee });
+        fields.insert("assignee".into(), json!({ "name": assignee }));
     }
 
-    json!({ "fields": fields })
+    json!({ "fields": Value::Object(fields) })
 }
 
 pub fn extract_project_key(parent_key: &str) -> &str {
