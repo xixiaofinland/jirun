@@ -19,7 +19,7 @@ where
     F: FnOnce(&JiraConfig) -> Vec<String>,
 {
     let token = dotenvy::var("JIRA_TOKEN").expect("JIRA_TOKEN environment variable must be set");
-    let config = JiraConfig::load_config()?;
+    let config = JiraConfig::load()?;
     let tasks = select_tasks(&config);
 
     print_task_summary(&parent, &config, &tasks, assignee)?;
@@ -70,8 +70,8 @@ fn print_dry_run_summary(
     Ok(())
 }
 
-pub fn handle_init() -> Result<(), Box<dyn Error>> {
-    if JiraConfig::init()? {
+pub fn handle_init(global: bool) -> Result<(), Box<dyn Error>> {
+    if JiraConfig::init(global)? {
         println!("\n✨ Init complete.");
     } else {
         println!("\nℹ️ Nothing to do — config and .env already exist.");

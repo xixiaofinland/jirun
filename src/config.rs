@@ -1,7 +1,7 @@
 use serde::Deserialize;
-use std::env;
 use std::fs;
 use std::path::Path;
+use std::path::PathBuf;
 
 const DEFAULT_CONFIG: &str = r#"[server]
 url = "https://yourcompany.atlassian.net"
@@ -49,9 +49,19 @@ pub struct JiraConfig {
 }
 
 impl JiraConfig {
-    pub fn init() -> Result<bool, Box<dyn std::error::Error>> {
-        let config_path = Path::new(".jirun.toml");
-        let env_path = Path::new(".env");
+    pub fn init(global: bool) -> Result<bool, Box<dyn std::error::Error>> {
+        let (config_path, env_path) = if global {
+            let base = dirs::config_dir()
+                .ok_or("❌ Could not determine config directory (XDG_CONFIG_HOME)")?
+                .join("jirun");
+            std::fs::create_dir_all(&base)?;
+            (base.join("config.toml"), base.join(".env"))
+        } else {
+            (
+                Path::new(".jirun.toml").to_path_buf(),
+                Path::new(".env").to_path_buf(),
+            )
+        };
 
         let mut created_any = false;
 
@@ -77,15 +87,12 @@ impl JiraConfig {
         Ok(created_any)
     }
 
-    pub fn load_config() -> Result<Self, Box<dyn std::error::Error>> {
-        let config_path = env::current_dir()?.join(".jirun.toml");
-        if !config_path.exists() {
-            return Err(format!(
-                "❌ Config file not found at {:?}. Run `jirun init` to create one.",
-                config_path
-            )
-            .into());
-        }
+    pub fn load() -> Result<Self, Box<dyn std::error::Error>> {
+        let config_path = Self::config_locations()
+            .into_iter()
+            .find(|p| p.exists())
+            .ok_or("❌ No config file found. Run `jirun init (--global)`.")?;
+
         let content = fs::read_to_string(&config_path)
             .map_err(|e| format!("❌ Failed to read config file at {:?}: {}", config_path, e))?;
         let config: JiraConfig = toml::from_str(&content).map_err(|e| {
@@ -115,5 +122,16 @@ impl JiraConfig {
             .filter(|line| !line.is_empty())
             .map(String::from)
             .collect()
+    }
+
+    fn config_locations() -> Vec<PathBuf> {
+        let mut paths = Vec::new();
+        if let Ok(cwd) = std::env::current_dir() {
+            paths.push(cwd.join(".jirun.toml"));
+        }
+        if let Some(home_config) = dirs::config_dir() {
+            paths.push(home_config.join("jirun").join("config.toml"));
+        }
+        paths
     }
 }
