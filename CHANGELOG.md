@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.12.0](https://github.com/xixiaofinland/jirun/compare/v0.11.0...v0.12.0) (2025-04-20)
+
+
+### Features
+
+* initiate readme.md ([b732fc4](https://github.com/xixiaofinland/jirun/commit/b732fc403d94adbb64c3123456f16ccf19c63633))
+
+
+### Bug Fixes
+
+* global config is not located correctly ([f723dae](https://github.com/xixiaofinland/jirun/commit/f723daef7b59c67b65cae75f1588203bd002bda4))
+
 ## [0.11.0](https://github.com/xixiaofinland/jirun/compare/v0.10.0...v0.11.0) (2025-04-20)
 
 
