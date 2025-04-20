@@ -107,10 +107,7 @@ impl TaskContext {
                     "{}. '{}' — {}",
                     i + 1,
                     bold_white(task),
-                    red(&format!(
-                        "skipped (identical title in {})",
-                        existing_key
-                    ))
+                    red(&format!("skipped (identical title in {})", existing_key))
                 );
             } else {
                 println!("{}. '{}'", i + 1, bold_white(task));
