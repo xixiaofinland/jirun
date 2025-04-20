@@ -1,6 +1,22 @@
 # 🛠️ Jirun
 
 >A CLI tool that generates JIRA sub-task(s) with pre-populated field values.
+
+## Table of Contents
+- [❓ What Problem Does It Solve?](#-what-problem-does-it-solve)
+- [🚀 Quick Start](#-quick-start)
+- [✨ Other Features](#-other-features)
+- [🚀 Usage](#-usage)
+- [📥 Installation](#-installation)
+  - [1. Script Install](#1-script-install)
+    - [For Linux/MacOS](#for-linuxmacos)
+    - [For Windows (PowerShell)](#for-windows-powershell)
+  - [2. Cargo Install](#2-cargo-install)
+  - [3. Manual Download](#3-manual-download)
+- [🧰 Configuration](#-configuration)
+- [❓ FAQ](#-faq)
+- [📄 License](#-license)
+
 <br>
 
 ## ❓ What Problem Does It Solve?
@@ -80,11 +96,53 @@ Options:
      Show request payloads without sending to JIRA
 ```
 
-## 📦 Install
+## 📥 Installation
 
-```sh
+### 1. Script Install
+
+#### For Linux/MacOS
+
+```bash
+curl -sL https://raw.githubusercontent.com/xixiaofinland/jirun/main/scripts/install-jirun.sh | bash
+```
+
+#### For Windows (PowerShell)
+
+```ps1
+iwr -useb https://raw.githubusercontent.com/xixiaofinland/jirun/main/scripts/install-jirun.ps1 | iex
+```
+
+> [!NOTE]
+> If you see an error like "This script contains malicious content and has been
+> blocked by your antivirus software", it means Microsoft Defender flagged it
+> for downloading and executing content from the internet. To proceed, either
+> lower Defender’s protection or break the script into smaller steps:
+
+```ps1
+# Step 1: Review the script manually
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/xixiaofinland/jirun/main/scripts/install-jirun.ps1 -OutFile install-jirun.ps1
+notepad install-jirun.ps1  # Inspect the content
+
+# Step 2: Run after trust
+powershell -ExecutionPolicy Bypass -File install-jirun.ps1
+```
+
+<br>
+
+### 2. Cargo Install
+
+`jirun` is published in creates.io [here](https://crates.io/crates/jirun).
+Run cmd below if you have the `Cargo` tool.
+
+```bash
 cargo install jirun
 ```
+
+<br>
+
+### 3. Manual Download
+
+Visit the [release page](https://github.com/xixiaofinland/jirun/releases/latest) and download the appropriate binary for your operating system (Linux, macOS, or Windows).
 
 ## 🧰 Configuration
 
