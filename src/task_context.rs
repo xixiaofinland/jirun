@@ -4,7 +4,9 @@ use std::{collections::HashMap, error::Error};
 use crate::{
     config::JiraConfig,
     jira::build_jira_payload,
-    utils::{bold_cyan, bold_white, bold_yellow, truncate_with_ellipsis},
+    utils::{
+        bold_cyan, bold_white, bold_yellow, print_line_separator, red, truncate_with_ellipsis,
+    },
 };
 
 pub struct TaskContext {
@@ -63,23 +65,23 @@ impl TaskContext {
         })
     }
 
-    pub fn print_task_summary(&self, tasks: &[&String]) -> Result<(), Box<dyn Error>> {
-        println!("\n{}", bold_yellow("Parent:"));
-        println!("-----");
+    pub fn print_task_summary(
+        &self,
+        original: &[String],
+        duplicates: &[(String, String)],
+    ) -> Result<(), Box<dyn Error>> {
+        let duplicates: HashMap<_, _> = duplicates.iter().cloned().collect();
+
+        println!("{}", bold_yellow("Parent:"));
+        print_line_separator();
         println!(
             "🔗 {} — '{}'",
             self.parent_key,
             bold_cyan(&self.parent_summary)
         );
 
-        println!("\n{}", bold_yellow("Tasks:"));
-        println!("-----");
-        for (i, task) in tasks.iter().enumerate() {
-            println!("{}. {}", i + 1, bold_white(task));
-        }
-
         println!("\n{}", bold_yellow("Prefill:"));
-        println!("-----");
+        print_line_separator();
 
         if let Some(labels) = &self.config.prefill.labels {
             let joined = labels.join(", ");
@@ -95,15 +97,34 @@ impl TaskContext {
         } else {
             println!("👤 Assignee: (none)");
         }
-        println!();
 
+        println!("\n{}", bold_yellow("Sub-tasks to create:"));
+        print_line_separator();
+
+        for (i, task) in original.iter().enumerate() {
+            if let Some(existing_key) = duplicates.get(task) {
+                println!(
+                    "{}. '{}' — {}",
+                    i + 1,
+                    bold_white(task),
+                    red(&format!(
+                        "skipped (identical title in the existing subtask: {})",
+                        existing_key
+                    ))
+                );
+            } else {
+                println!("{}. '{}'", i + 1, bold_white(task));
+            }
+        }
+
+        println!();
         Ok(())
     }
 
-    pub fn print_dry_run_summary(&self, tasks: &[String]) -> Result<(), Box<dyn Error>> {
+    pub fn print_dry_run_summary(&self, to_create: &[String]) -> Result<(), Box<dyn Error>> {
         println!("🔗 API: {}\n", self.config.api_url());
 
-        for (i, summary) in tasks.iter().enumerate() {
+        for (i, summary) in to_create.iter().enumerate() {
             let display_summary = truncate_with_ellipsis(summary, 20);
             println!(
                 "📦 Dry-run: would send this payload for sub-task #{}: '{}'",
@@ -124,21 +145,25 @@ impl TaskContext {
         Ok(())
     }
 
-    pub fn filter_new_tasks<'a>(
-        &self,
-        tasks: &'a [String],
-    ) -> (Vec<&'a String>, Vec<(&'a String, String)>) {
+    pub fn filter_new_tasks(&self, tasks: &[String]) -> (Vec<String>, Vec<(String, String)>) {
         let mut to_create = Vec::new();
-        let mut duplicates: Vec<(&String, String)> = Vec::new();
+        let mut duplicates = Vec::new();
 
         for task in tasks {
-            if let Some(key) = self.existing_subtask_summaries.get(task) {
-                duplicates.push((task, key.clone()));
+            let task_lower = task.to_lowercase();
+
+            // Try to find a match ignoring case
+            let maybe_duplicate = self
+                .existing_subtask_summaries
+                .iter()
+                .find(|(summary, _)| summary.to_lowercase() == task_lower);
+
+            if let Some((_, key)) = maybe_duplicate {
+                duplicates.push((task.clone(), key.clone()));
             } else {
-                to_create.push(task);
+                to_create.push(task.clone());
             }
         }
-
         (to_create, duplicates)
     }
 }
