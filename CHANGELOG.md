@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.0](https://github.com/xixiaofinland/jirun/compare/v0.14.0...v0.15.0) (2025-04-20)
+
+
+### Features
+
+* add install scripts ([5640962](https://github.com/xixiaofinland/jirun/commit/5640962d9fdd3e9bcb9e204e721ff64793e4e992))
+
 ## [0.14.0](https://github.com/xixiaofinland/jirun/compare/v0.13.0...v0.14.0) (2025-04-20)
 
 
