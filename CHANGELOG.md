@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.0](https://github.com/xixiaofinland/jirun/compare/v0.13.0...v0.14.0) (2025-04-20)
+
+
+### Features
+
+* create mock api and refact ([a844c65](https://github.com/xixiaofinland/jirun/commit/a844c65dffd43f0e86f2daa3b9269dc714a56f74))
+
 ## [0.13.0](https://github.com/xixiaofinland/jirun/compare/v0.12.0...v0.13.0) (2025-04-20)
 
 
