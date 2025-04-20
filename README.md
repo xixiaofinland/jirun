@@ -1,14 +1,52 @@
 # 🛠️ Jirun
 
-> Generate JIRA sub-tasks from pre-defined templates — fast, local, and customizable.
+>A CLI tool that generates JIRA sub-task(s) with pre-populated field values.
+<br>
 
-## ✨ Features
+## ❓ What Problem Does It Solve?
 
-- 📁 Init config template files: `.jirun.toml` and `.env`
-- 🔗 Create defined sub-tasks with prefilled field values
-- 🧪 Run with dry-run mode
-- 🌍 Support global or local config
-- 🔐 Detect and exclude duplicate existing sub-task (simply by summary/title)
+Manually creating repetitive JIRA sub-tasks can be time-consuming and
+error-prone. Jirun streamlines this by allowing you to generate sub-tasks with
+template, saving you time and ensuring consistency.
+
+## 🚀 Quick Start
+1. **Initialize Configuration:**
+
+```bash
+jirun init --global
+```
+
+This creates `.jirun.toml` and `.env` files in OS preferred directory.
+
+2. **Edit Configuration:**
+
+- In `.env` set your JIRA user bearer token: the authentication to create sub-tasks.
+- In `.jirun.toml` define server url, templated subtask field and value(s), and
+  subtasks to be created when running `jirun template` and `jirn new` commands.
+
+3. **Dry Run**
+
+```bash
+jirun template --parent PROJ-123 --dry-run # then without `--dry-run` for the real action.
+```
+
+When you are not sure, this command prints out the raw payloads without sending
+the real request.
+
+4. **Create new Sub-tasks**
+
+```bash
+jirun new --parent PROJ-123
+
+```
+
+This command creates JIRA sub-tasks defined in `[sub_tasks.new_tasks]`. Each
+subtask per line.
+
+## ✨ Other Features
+
+- 🌍 Support generating global (`jirun init --global`) or local (`jirun init`) config files.
+- 🔐 Detect and skip subtasks that are already existing.
 
 ## 🚀 Usage
 
@@ -81,6 +119,14 @@ Document usage
 ```env
 JIRA_TOKEN=your-api-token-here
 ```
+
+## ❓ FAQ
+
+- "difference between template_tasks for `jirun template` and new_tasks for `jirun new`"?
+
+template_tasks is for storing reusable tasks you create repeatedly. new_tasks is
+for ad-hoc subtasks you update frequently. Functionally, `jirun template` and
+`jirun new` have the same underlying logic.
 
 ## 📄 License
 
