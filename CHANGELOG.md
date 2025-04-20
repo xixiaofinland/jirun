@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.0](https://github.com/xixiaofinland/jirun/compare/v0.10.0...v0.11.0) (2025-04-20)
+
+
+### Features
+
+* remove duplicates in subtask creation and update report ([8f4ecad](https://github.com/xixiaofinland/jirun/commit/8f4ecade612df7d3bba76766722f24b45f2723e6))
+
 ## [0.10.0](https://github.com/xixiaofinland/jirun/compare/v0.9.0...v0.10.0) (2025-04-19)
 
 

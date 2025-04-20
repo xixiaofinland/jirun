@@ -1,6 +1,6 @@
 [package]
 name = "jirun"
-version = "0.10.0"
+version = "0.11.0"
 edition = "2021"
 description = "A Cli Generating JIRA sub-tasks from a template with a specified parent"
 license = "MIT OR Apache-2.0"
