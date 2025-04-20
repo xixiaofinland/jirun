@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.0](https://github.com/xixiaofinland/jirun/compare/v0.12.0...v0.13.0) (2025-04-20)
+
+
+### Features
+
+* remove toolchain file to see if gh action release macos build working ([0f39ae2](https://github.com/xixiaofinland/jirun/commit/0f39ae295ca956b6ab26c36d0461c84c0b1abd73))
+
 ## [0.12.0](https://github.com/xixiaofinland/jirun/compare/v0.11.0...v0.12.0) (2025-04-20)
 
 
