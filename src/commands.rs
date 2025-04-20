@@ -1,5 +1,9 @@
-use crate::{config::JiraConfig, jira::send_subtask};
-use jirun::{task_context::TaskContext, utils::print_line_separator};
+use crate::config::JiraConfig;
+use jirun::{
+    jira::RealJiraApi,
+    task_context::TaskContext,
+    utils::{build_jira_payload, print_line_separator},
+};
 use std::{
     error::Error,
     io::{self, Write},
@@ -14,9 +18,16 @@ pub fn handle_subtask_command<F>(
 where
     F: FnOnce(&JiraConfig) -> Vec<String>,
 {
+    let token = dotenvy::var("JIRA_TOKEN")?;
     let config = JiraConfig::load()?;
     let tasks = select_tasks(&config);
-    let ctx = TaskContext::new(&parent, assignee.map(str::to_string), dry_run)?;
+    let api = RealJiraApi::new(config.api_url(), token);
+    let ctx = TaskContext::from_api(
+        Box::new(api),
+        &parent,
+        assignee.map(str::to_string),
+        dry_run,
+    )?;
 
     let (to_create, duplicates) = ctx.filter_new_tasks(&tasks);
     ctx.print_task_summary(&tasks, &duplicates)?;
@@ -38,9 +49,14 @@ where
     }
 
     for summary in &to_create {
-        if let Err(err) = send_subtask(&config, &ctx.token, &parent, summary, assignee) {
-            eprintln!("{err}");
-        }
+        let payload = build_jira_payload(
+            &ctx.config,
+            &ctx.parent_key,
+            summary,
+            ctx.assignee.as_deref(),
+        );
+        let key = ctx.api.create_subtask(&payload)?;
+        println!("✅ Created sub-task: {key}");
     }
 
     Ok(())

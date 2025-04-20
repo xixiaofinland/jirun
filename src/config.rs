@@ -30,6 +30,7 @@ pub struct Server {
     pub url: String,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize)]
 pub struct Prefill {
     pub labels: Option<Vec<String>>,
@@ -42,6 +43,7 @@ pub struct SubTasks {
     pub new_tasks: String,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize)]
 pub struct JiraConfig {
     pub server: Server,

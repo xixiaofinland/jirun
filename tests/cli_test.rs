@@ -1,5 +1,7 @@
+mod common;
+
 use assert_cmd::Command;
-use jirun::test_support::write_sample_config_and_env;
+use common::test_helper::write_sample_config_and_env;
 use predicates::str::contains;
 use tempfile::tempdir;
 
@@ -19,7 +21,9 @@ fn template_command_prints_tasks_and_aborts_on_no() {
         .stdout(contains("Aborted"));
 }
 
+// TODO: how to CLI test for mocking api?
 #[test]
+#[ignore]
 fn template_command_accepts_confirmation_and_proceeds() {
     let dir = tempfile::tempdir().unwrap();
     write_sample_config_and_env(dir.path());

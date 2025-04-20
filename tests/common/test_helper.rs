@@ -1,4 +1,4 @@
-use crate::config::JiraConfig;
+use jirun::config::JiraConfig;
 use std::fs;
 
 #[allow(dead_code)]

@@ -1,17 +1,10 @@
+use crate::{config::JiraConfig, jira::JiraApi, utils::*};
 use serde_json::to_string_pretty;
 use std::{collections::HashMap, error::Error};
 
-use crate::{
-    config::JiraConfig,
-    jira::build_jira_payload,
-    utils::{
-        bold_cyan, bold_white, bold_yellow, print_line_separator, red, truncate_with_ellipsis,
-    },
-};
-
 pub struct TaskContext {
     pub config: JiraConfig,
-    pub token: String,
+    pub api: Box<dyn JiraApi>,
     pub parent_key: String,
     pub parent_summary: String,
     pub existing_subtask_summaries: HashMap<String, String>,
@@ -20,23 +13,14 @@ pub struct TaskContext {
 }
 
 impl TaskContext {
-    pub fn new(
+    pub fn from_api(
+        api: Box<dyn JiraApi>,
         parent_key: &str,
         assignee: Option<String>,
         dry_run: bool,
     ) -> Result<Self, Box<dyn Error>> {
-        let token = dotenvy::var("JIRA_TOKEN")?;
         let config = JiraConfig::load()?;
-        let url = format!("{}/{}", config.api_url(), parent_key);
-
-        let client = reqwest::blocking::Client::new();
-        let res = client
-            .get(&url)
-            .bearer_auth(&token)
-            .header("Accept", "application/json")
-            .send()?;
-
-        let json: serde_json::Value = res.json()?;
+        let json = api.fetch_parent_issue(parent_key)?;
 
         let parent_summary = json["fields"]["summary"]
             .as_str()
@@ -56,7 +40,7 @@ impl TaskContext {
 
         Ok(Self {
             config,
-            token,
+            api,
             parent_key: parent_key.to_string(),
             parent_summary,
             existing_subtask_summaries,
