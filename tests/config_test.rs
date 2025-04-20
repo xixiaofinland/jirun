@@ -1,4 +1,6 @@
-use jirun::test_support::load_sample_config;
+mod common;
+
+use common::test_helper::load_sample_config;
 
 #[test]
 fn test_config_parses_correctly() {
