@@ -74,7 +74,7 @@ impl JiraConfig {
         let config_path = Self::config_locations()
             .into_iter()
             .find(|p| p.exists())
-            .ok_or("❌ No config file found. Run `jirun init (--global)`.")?;
+            .ok_or("❌ No config file found. Run `jirun init --global`.")?;
 
         let content = fs::read_to_string(&config_path)
             .map_err(|e| format!("❌ Failed to read config file at {:?}: {}", config_path, e))?;
@@ -151,7 +151,7 @@ impl JiraConfig {
             paths.push(cwd.join(".jirun.toml"));
         }
         if let Some(home_config) = dirs::config_dir() {
-            paths.push(home_config.join("jirun").join("config.toml"));
+            paths.push(home_config.join("jirun").join(".jirun.toml"));
         }
         paths
     }

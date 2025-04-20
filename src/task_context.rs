@@ -108,7 +108,7 @@ impl TaskContext {
                     i + 1,
                     bold_white(task),
                     red(&format!(
-                        "skipped (identical title in the existing subtask: {})",
+                        "skipped (identical title in {})",
                         existing_key
                     ))
                 );
@@ -117,7 +117,6 @@ impl TaskContext {
             }
         }
 
-        println!();
         Ok(())
     }
 
