@@ -1,8 +1,5 @@
 use crate::{config::JiraConfig, jira::send_subtask};
-use jirun::{
-    task_context::TaskContext,
-    utils::{bold_cyan, bold_white},
-};
+use jirun::{task_context::TaskContext, utils::print_line_separator};
 use std::{
     error::Error,
     io::{self, Write},
@@ -22,28 +19,25 @@ where
     let ctx = TaskContext::new(&parent, assignee.map(str::to_string), dry_run)?;
 
     let (to_create, duplicates) = ctx.filter_new_tasks(&tasks);
-
-    if !duplicates.is_empty() {
-        println!("⚠️  Skipped {} duplicate task(s):", duplicates.len());
-        for (summary, key) in duplicates {
-            println!("• {} ({})", bold_white(summary), bold_cyan(&key));
-        }
-        println!();
-    }
-
-    ctx.print_task_summary(&to_create)?;
+    ctx.print_task_summary(&tasks, &duplicates)?;
 
     if dry_run {
-        ctx.print_dry_run_summary(&tasks)?;
+        ctx.print_dry_run_summary(&to_create)?;
         return Ok(());
     }
 
-    if !prompt_confirm()? {
+    if to_create.is_empty() {
+        print_line_separator();
+        println!("⚠️  No new tasks to create. Terminating...");
+        return Ok(());
+    }
+
+    if !prompt_confirm(to_create.len())? {
         println!("❌ Aborted.");
         return Ok(());
     }
 
-    for summary in &tasks {
+    for summary in &to_create {
         if let Err(err) = send_subtask(&config, &ctx.token, &parent, summary, assignee) {
             eprintln!("{err}");
         }
@@ -60,8 +54,8 @@ pub fn handle_init(global: bool) {
     }
 }
 
-fn prompt_confirm() -> Result<bool, Box<dyn Error>> {
-    print!("\n✅ Proceed with creating these sub-tasks? [y/N]: ");
+fn prompt_confirm(size: usize) -> Result<bool, Box<dyn Error>> {
+    print!("\n✅ {} sub-task(s) to create, proceed? [y/N]: ", size);
     io::stdout().flush()?;
 
     let mut input = String::new();

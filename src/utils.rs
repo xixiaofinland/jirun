@@ -20,3 +20,11 @@ pub fn bold_cyan(text: &str) -> String {
 pub fn bold_white(text: &str) -> String {
     format!("\x1b[1;97m{}\x1b[0m", text)
 }
+
+pub fn red(text: &str) -> String {
+    format!("\x1b[31m{}\x1b[0m", text)
+}
+
+pub fn print_line_separator() {
+    println!("-----");
+}
