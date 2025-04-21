@@ -27,7 +27,21 @@ impl JiraApi for RealJiraApi {
             .bearer_auth(&self.token)
             .header("Accept", "application/json")
             .send()?;
-        Ok(res.json()?)
+
+        let status = res.status();
+        if !status.is_success() {
+            let body = res
+                .text()
+                .unwrap_or_else(|_| "<failed to read body>".into());
+            return Err(format!(
+                "❌ Failed to fetch issue {}: HTTP {} – {}",
+                parent_key, status, body
+            )
+            .into());
+        }
+
+        let json: Value = res.json()?;
+        Ok(json)
     }
 
     fn create_subtask(&self, payload: &Value) -> JirunResult<String> {
