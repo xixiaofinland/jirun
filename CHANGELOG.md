@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.0](https://github.com/xixiaofinland/jirun/compare/v0.16.0...v0.17.0) (2025-04-21)
+
+
+### Features
+
+* show error when parent_call response non ok ([418f309](https://github.com/xixiaofinland/jirun/commit/418f309e8664deeeb10d9a38871cc6a61c85b493))
+
 ## [0.16.0](https://github.com/xixiaofinland/jirun/compare/v0.15.0...v0.16.0) (2025-04-21)
 
 
