@@ -1,10 +1,8 @@
-mod common;
-
-use common::test_helper::load_sample_config;
+use jirun::common::test_helper::load_test_config;
 
 #[test]
 fn test_config_parses_correctly() {
-    let config = load_sample_config();
+    let config = load_test_config();
 
     assert_eq!(config.server.url, "https://yourcompany.atlassian.net");
     assert_eq!(

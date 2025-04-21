@@ -143,13 +143,7 @@ where
     let config = JiraConfig::load()?;
     let tasks = select_tasks(&config);
     let api = RealJiraApi::new(config.api_url(), token);
-    let ctx = TaskContext::new(
-        config,
-        Box::new(api),
-        &parent,
-        assignee.map(str::to_string),
-        dry_run,
-    )?;
+    let ctx = TaskContext::new(config, Box::new(api), &parent, assignee.map(str::to_string))?;
 
     let (to_create, duplicates) = ctx.filter_new_tasks(&tasks);
     ctx.print_task_summary(&tasks, &duplicates)?;
