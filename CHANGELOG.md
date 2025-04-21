@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.0](https://github.com/xixiaofinland/jirun/compare/v0.15.0...v0.16.0) (2025-04-21)
+
+
+### Features
+
+* unit tests and integration tests pass ([c547fa8](https://github.com/xixiaofinland/jirun/commit/c547fa8608596a842615cf7e76093c1bfa5c5d39))
+
 ## [0.15.0](https://github.com/xixiaofinland/jirun/compare/v0.14.0...v0.15.0) (2025-04-20)
 
 
