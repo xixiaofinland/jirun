@@ -21,12 +21,13 @@
 
 ## 💡 What Problem Does It Solve?
 
-Tired of the repetitive JIRA sub-task creating dance? You know — clicking "new",
-selecting "Sub-task", give a descriptive name, assigning yourself, adding the
-"teamX" label, clicking "create"... and 10+ sub tasks in the queue...
+Tired of the repetitive JIRA sub-task creating dance?
+You know — clicking "new", selecting "Sub-task", give a descriptive name,
+assigning yourself, adding the "teamX" label, clicking "create"... and 10+ sub
+tasks in the queue...
 
-`jirun` eliminates this tedium by generating consistent sub-tasks from templates
-with pre-filled fields—saving you time and keeping your workflow smooth.
+`jirun` eliminates this tedium by generating sub-tasks with pre-filled
+fields—saving you time and keeping your workflow smooth.
 
 ## 🚀 Quick Start
 1. **Initialize Configuration:**
