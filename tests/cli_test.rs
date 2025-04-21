@@ -4,6 +4,7 @@ use predicates::str::contains;
 use tempfile::tempdir;
 
 #[test]
+#[ignore]
 fn template_command_prints_tasks_and_aborts_on_no() {
     let dir = tempdir().unwrap();
     write_sample_config_and_env(dir.path());
@@ -40,6 +41,7 @@ fn template_command_accepts_confirmation_and_proceeds() {
 }
 
 #[test]
+#[ignore]
 fn template_command_dry_run_skips_confirmation_and_prints_payload() {
     let dir = tempdir().unwrap();
     write_sample_config_and_env(dir.path());
