@@ -21,9 +21,12 @@
 
 ## ❓ What Problem Does It Solve?
 
-Manually creating repetitive JIRA sub-tasks can be time-consuming and
-error-prone. Jirun streamlines this by allowing you to generate sub-tasks with
-template, saving you time and ensuring consistency.
+Tired of the repetitive JIRA sub-task creating dance? You know — clicking "new",
+selecting "Sub-task", give a descriptive name, assigning yourself, adding the
+"teamX" label, clicking "create"... and 10+ sub tasks in the queue...
+
+`jirun` eliminates this tedium by generating consistent sub-tasks from templates
+with pre-filled fields—saving you time and keeping your workflow smooth.
 
 ## 🚀 Quick Start
 1. **Initialize Configuration:**
