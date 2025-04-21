@@ -183,11 +183,23 @@ JIRA_TOKEN=your-api-token-here
 
 ## ❓ FAQ
 
-- "difference between template_tasks for `jirun template` and new_tasks for `jirun new`"?
+> What's the difference between putting sub-tasks under template_tasks or
+> new_tasks section in .jirun.toml?
 
-template_tasks is for storing reusable tasks you create repeatedly. new_tasks is
-for ad-hoc subtasks you update frequently. Functionally, `jirun template` and
-`jirun new` have the same underlying logic.
+**template_tasks:**
+
+- Executed by `jirun template` command
+- Store sub-tasks you repeat frequently across different tickets
+- Reusable workflow patterns
+
+**new_tasks:**
+
+- Executed by `jirun new` command
+- For ad-hoc, ticket-specific sub-tasks
+- One-off task sequences
+
+Both commands share the same underlying logic - the separation simply helps
+organize your brain between standard templates and custom task lists.
 
 ## 📄 License
 

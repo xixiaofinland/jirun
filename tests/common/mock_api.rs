@@ -9,7 +9,20 @@ impl JiraApi for MockJiraApi {
         Ok(json!({
             "fields": {
                 "summary": "Fake parent summary",
-                "subtasks": []
+                "subtasks": [
+                    {
+                        "key": "FAKE-1",
+                        "fields": {
+                            "summary": "Existing Task A"
+                        }
+                    },
+                    {
+                        "key": "FAKE-2",
+                        "fields": {
+                            "summary": "Existing Task B"
+                        }
+                    }
+                ]
             }
         }))
     }

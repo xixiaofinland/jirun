@@ -1,18 +1,18 @@
-// // use jirun::commands::handle_template_with_api;
-// use jirun::common::mock_api::MockJiraApi;
-//
-// #[test]
-// fn test_template_handle_skips_duplicates() {
-//     let mock_api = MockJiraApi::with_existing_subtasks(&["Task A"]);
-//
-//     let result = handle_template_with_api(
-//         Box::new(mock_api),
-//         "PROJ-123".into(),
-//         Some("john.doe".into()),
-//         true, // dry_run
-//     );
-//
-//     assert!(result.is_ok());
-//
-//     // You can also assert captured stdout here if needed
-// }
+mod common;
+
+use common::mock_api::MockJiraApi;
+use jirun::jira::api::JiraApi;
+
+#[test]
+fn test_fetch_parent_issue() {
+    let api = MockJiraApi;
+    let issue = api.fetch_parent_issue("JIRA-123").unwrap();
+
+    let summary = issue["fields"]["summary"]
+        .as_str()
+        .unwrap_or("<unknown summary>");
+    assert_eq!(summary, "Fake parent summary");
+
+    let subtasks = issue["fields"]["subtasks"].as_array().unwrap();
+    assert_eq!(subtasks.len(), 2);
+}
