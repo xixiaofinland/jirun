@@ -3,7 +3,7 @@
 >A CLI tool that generates JIRA sub-task(s) with pre-populated field values.
 
 ## Table of Contents
-- [❓ What Problem Does It Solve?](#-what-problem-does-it-solve)
+- [💡 What Problem Does It Solve?](#-what-problem-does-it-solve)
 - [🚀 Quick Start](#-quick-start)
 - [✨ Other Features](#-other-features)
 - [🚀 Usage](#-usage)
@@ -19,7 +19,7 @@
 
 <br>
 
-## ❓ What Problem Does It Solve?
+## 💡 What Problem Does It Solve?
 
 Tired of the repetitive JIRA sub-task creating dance? You know — clicking "new",
 selecting "Sub-task", give a descriptive name, assigning yourself, adding the
