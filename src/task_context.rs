@@ -13,13 +13,13 @@ pub struct TaskContext {
 }
 
 impl TaskContext {
-    pub fn from_api(
+    pub fn new(
+        config: JiraConfig,
         api: Box<dyn JiraApi>,
         parent_key: &str,
         assignee: Option<String>,
         dry_run: bool,
     ) -> Result<Self, Box<dyn Error>> {
-        let config = JiraConfig::load()?;
         let json = api.fetch_parent_issue(parent_key)?;
 
         let parent_summary = json["fields"]["summary"]
