@@ -1,4 +1,4 @@
-use jirun::jira::api::JiraApi;
+use crate::jira::JiraApi;
 use serde_json::json;
 use std::error::Error;
 
