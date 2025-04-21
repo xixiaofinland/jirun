@@ -1,14 +1,14 @@
 pub mod commands;
 pub mod common;
-pub mod config;
-pub mod env;
 
-pub use commands::{handle_init, handle_new_command, handle_template_command};
-
+mod config;
+mod env;
 mod jira;
 mod task_context;
 mod utils;
 
-pub fn run() -> Result<(), Box<dyn std::error::Error>> {
+pub type JirunResult<T> = Result<T, Box<dyn std::error::Error>>;
+
+pub fn run() -> JirunResult<()> {
     commands::run()
 }

@@ -1,8 +1,9 @@
 use serde::Deserialize;
-use std::error::Error;
 use std::fs;
 use std::path::Path;
 use std::path::PathBuf;
+
+use crate::JirunResult;
 
 const DEFAULT_CONFIG: &str = r#"[server]
 url = "https://yourcompany.atlassian.net"
@@ -72,7 +73,7 @@ impl JiraConfig {
         Self::init_at(config_path, env_path, "");
     }
 
-    pub fn load() -> Result<Self, Box<dyn Error>> {
+    pub fn load() -> JirunResult<Self> {
         let config_path = Self::config_locations()
             .into_iter()
             .find(|p| p.exists())

@@ -1,7 +1,4 @@
-use std::{
-    error::Error,
-    io::{self, Write},
-};
+use std::io::{self, Write};
 
 use clap::{Parser, Subcommand};
 
@@ -9,6 +6,7 @@ use crate::{
     env,
     task_context::TaskContext,
     utils::{build_jira_payload, print_line_separator},
+    JirunResult,
 };
 
 use crate::{config::JiraConfig, jira::RealJiraApi};
@@ -81,14 +79,11 @@ enum Commands {
     },
 }
 
-pub fn run() -> Result<(), Box<dyn std::error::Error>> {
-    // 1) Load .env once for everyone
+pub fn run() -> JirunResult<()> {
     env::try_load_dotenv();
 
-    // 2) Parse CLI
     let cli = crate::commands::Cli::parse();
 
-    // 3) Dispatch
     match cli.command {
         Commands::Init { global } => handle_init(global),
         Commands::Template {
@@ -106,7 +101,7 @@ pub fn run() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-pub fn handle_init(global: bool) {
+fn handle_init(global: bool) {
     if global {
         JiraConfig::init_global()
     } else {
@@ -114,19 +109,15 @@ pub fn handle_init(global: bool) {
     }
 }
 
-pub fn handle_template_command(
+fn handle_template_command(
     parent: String,
     assignee: Option<&str>,
     dry_run: bool,
-) -> Result<(), Box<dyn Error>> {
+) -> JirunResult<()> {
     handle_subtask_command(parent, assignee, dry_run, JiraConfig::template_task_list)
 }
 
-pub fn handle_new_command(
-    parent: String,
-    assignee: Option<&str>,
-    dry_run: bool,
-) -> Result<(), Box<dyn Error>> {
+fn handle_new_command(parent: String, assignee: Option<&str>, dry_run: bool) -> JirunResult<()> {
     handle_subtask_command(parent, assignee, dry_run, JiraConfig::new_task_list)
 }
 
@@ -135,7 +126,7 @@ fn handle_subtask_command<F>(
     assignee: Option<&str>,
     dry_run: bool,
     select_tasks: F,
-) -> Result<(), Box<dyn Error>>
+) -> JirunResult<()>
 where
     F: FnOnce(&JiraConfig) -> Vec<String>,
 {
@@ -178,7 +169,7 @@ where
     Ok(())
 }
 
-fn prompt_confirm(size: usize) -> Result<bool, Box<dyn Error>> {
+fn prompt_confirm(size: usize) -> JirunResult<bool> {
     print!("\n✅ {} sub-task(s) to create, proceed? [y/N]: ", size);
     io::stdout().flush()?;
 
