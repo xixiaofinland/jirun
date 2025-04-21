@@ -1,6 +1,5 @@
-use crate::jira::api::JiraApi;
+use crate::{jira::api::JiraApi, JirunResult};
 use serde_json::Value;
-use std::error::Error;
 
 pub struct RealJiraApi {
     pub url: String,
@@ -20,7 +19,7 @@ impl RealJiraApi {
 }
 
 impl JiraApi for RealJiraApi {
-    fn fetch_parent_issue(&self, parent_key: &str) -> Result<Value, Box<dyn Error>> {
+    fn fetch_parent_issue(&self, parent_key: &str) -> JirunResult<Value> {
         let url = format!("{}/{}", self.url, parent_key);
         let res = self
             .client
@@ -31,7 +30,7 @@ impl JiraApi for RealJiraApi {
         Ok(res.json()?)
     }
 
-    fn create_subtask(&self, payload: &Value) -> Result<String, Box<dyn Error>> {
+    fn create_subtask(&self, payload: &Value) -> JirunResult<String> {
         let res = self
             .client
             .post(&self.url)

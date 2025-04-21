@@ -1,6 +1,6 @@
-use crate::{config::JiraConfig, jira::JiraApi, utils::*};
+use crate::{config::JiraConfig, jira::JiraApi, utils::*, JirunResult};
 use serde_json::to_string_pretty;
-use std::{collections::HashMap, error::Error};
+use std::collections::HashMap;
 
 pub struct TaskContext {
     pub config: JiraConfig,
@@ -17,7 +17,7 @@ impl TaskContext {
         api: Box<dyn JiraApi>,
         parent_key: &str,
         assignee: Option<String>,
-    ) -> Result<Self, Box<dyn Error>> {
+    ) -> JirunResult<Self> {
         let json = api.fetch_parent_issue(parent_key)?;
 
         let parent_summary = json["fields"]["summary"]
@@ -50,7 +50,7 @@ impl TaskContext {
         &self,
         original: &[String],
         duplicates: &[(String, String)],
-    ) -> Result<(), Box<dyn Error>> {
+    ) -> JirunResult<()> {
         let duplicates: HashMap<_, _> = duplicates.iter().cloned().collect();
 
         println!("{}", bold_yellow("Parent:"));
@@ -98,7 +98,7 @@ impl TaskContext {
         Ok(())
     }
 
-    pub fn print_dry_run_summary(&self, to_create: &[String]) -> Result<(), Box<dyn Error>> {
+    pub fn print_dry_run_summary(&self, to_create: &[String]) -> JirunResult<()> {
         println!("🔗 API: {}\n", self.config.api_url());
 
         for (i, summary) in to_create.iter().enumerate() {

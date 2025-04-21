@@ -1,11 +1,10 @@
-use crate::jira::JiraApi;
-use serde_json::json;
-use std::error::Error;
+use crate::{jira::JiraApi, JirunResult};
+use serde_json::{json, Value};
 
 pub struct MockJiraApi;
 
 impl JiraApi for MockJiraApi {
-    fn fetch_parent_issue(&self, _key: &str) -> Result<serde_json::Value, Box<dyn Error>> {
+    fn fetch_parent_issue(&self, _key: &str) -> JirunResult<Value> {
         Ok(json!({
             "fields": {
                 "summary": "Fake parent summary",
@@ -27,7 +26,7 @@ impl JiraApi for MockJiraApi {
         }))
     }
 
-    fn create_subtask(&self, _payload: &serde_json::Value) -> Result<String, Box<dyn Error>> {
+    fn create_subtask(&self, _payload: &serde_json::Value) -> JirunResult<String> {
         Ok("FAKE-123".to_string())
     }
 }
