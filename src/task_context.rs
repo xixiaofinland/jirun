@@ -56,7 +56,7 @@ impl TaskContext {
         println!("{}", bold_yellow("Parent:"));
         print_line_separator();
         println!(
-            "🔗 {} — '{}'",
+            "{} — '{}'",
             self.issue_link(&self.parent_key),
             bold_cyan(&self.parent_summary)
         );
@@ -89,7 +89,7 @@ impl TaskContext {
                     i + 1,
                     bold_white(task),
                     red(&format!(
-                        "skipped (identical title found in 🔗 {})",
+                        "skipped (identical title found in {})",
                         self.issue_link(existing_key)
                     ))
                 );
@@ -148,7 +148,8 @@ impl TaskContext {
 
     pub fn issue_link(&self, issue_key: &str) -> String {
         let url = self.issue_url(issue_key);
-        hyperlink(issue_key, &url)
+        let link = hyperlink(issue_key, &url);
+        format!("🔗 {}", link)
     }
 
     fn issue_url(&self, issue_key: &str) -> String {
