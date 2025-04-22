@@ -57,7 +57,7 @@ impl TaskContext {
         print_line_separator();
         println!(
             "🔗 {} — '{}'",
-            self.issue_url(&self.parent_key),
+            self.issue_link(&self.parent_key),
             bold_cyan(&self.parent_summary)
         );
 
