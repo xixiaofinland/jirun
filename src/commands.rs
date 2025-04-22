@@ -163,7 +163,7 @@ where
             ctx.assignee.as_deref(),
         );
         let key = ctx.api.create_subtask(&payload)?;
-        println!("✅ Created sub-task: {}", ctx.issue_link(&key));
+        println!("✅ Created sub-task: 🔗 {}", ctx.issue_link(&key));
     }
 
     Ok(())
