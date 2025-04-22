@@ -89,7 +89,7 @@ impl TaskContext {
                     i + 1,
                     bold_white(task),
                     red(&format!(
-                        "skipped (identical title found in {})",
+                        "skipped (identical title found in 🔗 {})",
                         self.issue_link(existing_key)
                     ))
                 );
