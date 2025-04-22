@@ -21,13 +21,15 @@
 
 ## 💡 What Problem Does It Solve?
 
-Tired of the repetitive JIRA sub-task creating dance?
-You know — clicking "new", selecting "Sub-task", give a descriptive name,
-assigning yourself, adding the "teamX" label, clicking "create"... and 10+ sub
-tasks in the queue...
+Tired of the repetitive JIRA sub-task creation dance?
 
-`jirun` eliminates this tedium by generating sub-tasks with pre-filled
-fields—saving you time and keeping your workflow smooth.
+You know the routine — clicking "new", selecting "Sub-task", typing a
+descriptive name, assigning yourself, adding labels, clicking "create"... and
+repeating for 10+ sub-tasks.
+
+In `.jirun.toml`, define your field values (labels, assignee) and list your sub-task
+summaries ("enhance logic", "write tests", "update docs"). `jirun` creates them
+all in one go.
 
 ## 🚀 Quick Start
 1. **Initialize Configuration:**
