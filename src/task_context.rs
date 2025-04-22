@@ -57,7 +57,7 @@ impl TaskContext {
         print_line_separator();
         println!(
             "🔗 {} — '{}'",
-            self.parent_key,
+            self.issue_url(&self.parent_key),
             bold_cyan(&self.parent_summary)
         );
 
@@ -129,7 +129,6 @@ impl TaskContext {
         for task in tasks {
             let task_lower = task.to_lowercase();
 
-            // Try to find a match ignoring case
             let maybe_duplicate = self
                 .existing_subtask_summaries
                 .iter()
@@ -142,6 +141,19 @@ impl TaskContext {
             }
         }
         (to_create, duplicates)
+    }
+
+    pub fn issue_link(&self, issue_key: &str) -> String {
+        let url = self.issue_url(issue_key);
+        hyperlink(issue_key, &url)
+    }
+
+    fn issue_url(&self, issue_key: &str) -> String {
+        format!(
+            "{}/browse/{}",
+            self.config.server.url.trim_end_matches('/'),
+            issue_key
+        )
     }
 }
 
