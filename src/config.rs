@@ -6,7 +6,7 @@ use std::path::PathBuf;
 use crate::JirunResult;
 
 const DEFAULT_CONFIG: &str = r#"[server]
-url = "https://yourcompany.atlassian.net"
+url = "https://yourcompany.atlassian.net/jira"
 
 [prefill]
 labels = ["cli", "salesforce"]
@@ -140,7 +140,7 @@ impl JiraConfig {
         } else {
             fs::write(
                 &env_path,
-                "# JIRA API token (used by jirun)\nJIRA_TOKEN=your-api-token-here\n",
+                "# JIRA Person Access Token (used by jirun)\nJIRA_TOKEN=your-pat-token-here\n",
             )
             .expect("❌ Failed to write .env file");
             println!("✅ Created .env: {}{}", local_prefix, env_path.display());
