@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.0](https://github.com/xixiaofinland/jirun/compare/v0.20.0...v0.21.0) (2025-04-22)
+
+
+### Features
+
+* add hyperlink emoji ([cd41671](https://github.com/xixiaofinland/jirun/commit/cd4167119c45b1f4b99829189aeaf4e9ea8fdb23))
+
 ## [0.20.0](https://github.com/xixiaofinland/jirun/compare/v0.19.0...v0.20.0) (2025-04-22)
 
 
