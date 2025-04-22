@@ -157,7 +157,7 @@ Run `.jirun init --global` to generate the config template files.
 
 ```toml
 [server]
-url = "https://yourcompany.atlassian.net"
+url = "https://yourcompany.atlassian.net/jira"
 
 [prefill]
 labels = ["cli", "auto"]
