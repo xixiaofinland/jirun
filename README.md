@@ -43,13 +43,12 @@ This creates `.jirun.toml` and `.env` files in OS preferred directory.
 2. **Edit Configuration:**
 
 - In `.env` set your JIRA user bearer token: the authentication to create sub-tasks.
-- In `.jirun.toml` define server url, templated subtask field and value(s), and
-  subtasks to be created when running `jirun template` or `jirun new` commands.
+- In `.jirun.toml` define meta-data to be created when running `jirun new` or `jirun template` command.
 
 3. **Dry Run**
 
 ```bash
-jirun template --parent PROJ-123 --dry-run # then without `--dry-run` for the real action.
+jirun new --parent PROJ-123 --dry-run
 ```
 
 When you are not sure, this command prints out the raw payloads without sending
