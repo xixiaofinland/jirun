@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.20.0](https://github.com/xixiaofinland/jirun/compare/v0.19.0...v0.20.0) (2025-04-22)
+
+
+### Features
+
+* add hyperlink for duplicate prints ([735c75b](https://github.com/xixiaofinland/jirun/commit/735c75b96ead8ae259c2254c74a86a1bb11126ea))
+
 ## [0.19.0](https://github.com/xixiaofinland/jirun/compare/v0.18.0...v0.19.0) (2025-04-22)
 
 
