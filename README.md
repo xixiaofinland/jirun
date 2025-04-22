@@ -44,7 +44,7 @@ This creates `.jirun.toml` and `.env` files in OS preferred directory.
 
 - In `.env` set your JIRA user bearer token: the authentication to create sub-tasks.
 - In `.jirun.toml` define server url, templated subtask field and value(s), and
-  subtasks to be created when running `jirun template` or `jirn new` commands.
+  subtasks to be created when running `jirun template` or `jirun new` commands.
 
 3. **Dry Run**
 
