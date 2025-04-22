@@ -47,6 +47,13 @@ pub fn truncate_with_ellipsis(text: &str, max_chars: usize) -> String {
     }
 }
 
+/// Wraps `text` in an OSC 8 hyperlink to `url`.
+/// Most modern terminals will render it clickable; older ones will show the raw escape codes.
+pub fn hyperlink(text: &str, url: &str) -> String {
+    // OSC 8 ; ; URL BEL text OSC 8 ; ; BEL
+    format!("\x1b]8;;{}\x07{}\x1b]8;;\x07", url, text)
+}
+
 pub fn bold_yellow(text: &str) -> String {
     format!("\x1b[1;33m{}\x1b[0m", text)
 }
