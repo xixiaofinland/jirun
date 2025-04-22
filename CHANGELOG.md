@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.19.0](https://github.com/xixiaofinland/jirun/compare/v0.18.0...v0.19.0) (2025-04-22)
+
+
+### Features
+
+* fix ticket num hyperlink bug ([91dd502](https://github.com/xixiaofinland/jirun/commit/91dd50273772fd5c88d65402bd0dbc4ebd7fd388))
+
 ## [0.18.0](https://github.com/xixiaofinland/jirun/compare/v0.17.0...v0.18.0) (2025-04-22)
 
 
