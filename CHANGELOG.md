@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.18.0](https://github.com/xixiaofinland/jirun/compare/v0.17.0...v0.18.0) (2025-04-22)
+
+
+### Features
+
+* display ticket number with url ([7092587](https://github.com/xixiaofinland/jirun/commit/709258736fc94d20f7c22f09764a1d69a7cd3ef6))
+
 ## [0.17.0](https://github.com/xixiaofinland/jirun/compare/v0.16.0...v0.17.0) (2025-04-21)
 
 
