@@ -42,7 +42,7 @@ This creates `.jirun.toml` and `.env` files in OS preferred directory.
 
 2. **Edit Configuration:**
 
-- In `.env` set your JIRA user bearer token: the authentication to create sub-tasks.
+- In `.env` set your JIRA PAT(person access token) in order to create sub-tasks.
 - In `.jirun.toml` define meta-data to be created when running `jirun new` or `jirun template` command.
 
 3. **Dry Run**
