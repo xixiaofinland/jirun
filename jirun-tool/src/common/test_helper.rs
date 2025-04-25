@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::config::JiraConfig;
 use std::fs;
 

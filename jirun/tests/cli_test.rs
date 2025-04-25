@@ -1,5 +1,5 @@
 use assert_cmd::Command;
-use jirun::common::test_helper::write_sample_config_and_env;
+use jirun_tool::common::test_helper::write_sample_config_and_env;
 use predicates::str::contains;
 use tempfile::tempdir;
 

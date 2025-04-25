@@ -1,0 +1,15 @@
+[package]
+name = "jirun"
+version = "0.22.0"
+edition = "2024"
+description = "A Cli Generating JIRA sub-tasks from a template with a specified parent"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+jirun-tool = { path = "../jirun-tool" }
+
+[dev-dependencies]
+assert_cmd = "2.0.17"
+predicates = "3.1.3"
+tempfile = "3.19.1"
+

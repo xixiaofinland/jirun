@@ -675,14 +675,21 @@ name = "jirun"
 version = "0.22.0"
 dependencies = [
  "assert_cmd",
+ "jirun-tool",
+ "predicates",
+ "tempfile",
+]
+
+[[package]]
+name = "jirun-tool"
+version = "0.1.0"
+dependencies = [
  "clap",
  "dirs",
  "dotenvy",
- "predicates",
  "reqwest",
  "serde",
  "serde_json",
- "tempfile",
  "toml",
 ]
 
