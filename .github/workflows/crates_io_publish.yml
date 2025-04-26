@@ -27,5 +27,5 @@ jobs:
         run: |
           # Ensure Cargo.lock is up-to-date
           cargo check
-          # Publish to crates.io
-          cargo publish --no-verify
+          # Publish jirun crate to crates.io
+          cargo publish -p jirun --no-verify

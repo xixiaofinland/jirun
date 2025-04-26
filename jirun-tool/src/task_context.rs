@@ -1,4 +1,4 @@
-use crate::{config::JiraConfig, jira::JiraApi, utils::*, JirunResult};
+use crate::{JirunResult, config::JiraConfig, jira::JiraApi, utils::*};
 use serde_json::to_string_pretty;
 use std::collections::HashMap;
 

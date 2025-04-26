@@ -53,6 +53,5 @@ jobs:
       - name: Format + Clippy + Tests
         run: |
           cargo fmt -- --check
-          cargo clippy --all-targets --all-features -- -D warnings
-          cargo test --all --locked
-
+          cargo clippy --workspace --all-targets --all-features -- -D warnings
+          cargo test --workspace --locked
