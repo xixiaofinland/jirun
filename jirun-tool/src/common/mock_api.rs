@@ -1,5 +1,5 @@
-use crate::{jira::JiraApi, JirunResult};
-use serde_json::{json, Value};
+use crate::{JirunResult, jira::JiraApi};
+use serde_json::{Value, json};
 
 pub struct MockJiraApi;
 
