@@ -108,13 +108,13 @@ Options:
 #### For Linux/MacOS
 
 ```bash
-curl -sL https://raw.githubusercontent.com/xixiaofinland/jirun/main/scripts/install-jirun.sh | bash
+curl -sL https://raw.githubusercontent.com/xixiaofinland/jirun/main/jirun/scripts/install-jirun.sh | bash
 ```
 
 #### For Windows (PowerShell)
 
 ```ps1
-iwr -useb https://raw.githubusercontent.com/xixiaofinland/jirun/main/scripts/install-jirun.ps1 | iex
+iwr -useb https://raw.githubusercontent.com/xixiaofinland/jirun/main/jirun/scripts/install-jirun.ps1 | iex
 ```
 
 > [!NOTE]
