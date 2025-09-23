@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.23.0](https://github.com/xixiaofinland/jirun/compare/v0.22.0...v0.23.0) (2025-09-23)
+
+
+### Features
+
+* add simple new command to create one sub-task ([362ea1c](https://github.com/xixiaofinland/jirun/commit/362ea1c6717b06587b68e757eb2f17d5aa645977))
+* add simple task feature ([1d6bc78](https://github.com/xixiaofinland/jirun/commit/1d6bc786f473bd42ff41ab9aea26cb61141d5f28))
+
 ## [0.23.1](https://github.com/xixiaofinland/jirun/compare/jirun-v0.23.0...jirun-v0.23.1) (2025-09-23)
 
 
