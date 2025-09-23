@@ -104,4 +104,3 @@ fn new_command_simple_flag_creates_single_task() {
         .stdout(contains("PROJ-123"))
         .stdout(contains("Fix login bug"));
 }
-

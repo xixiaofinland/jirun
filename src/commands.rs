@@ -3,9 +3,10 @@ use std::io::{self, Write};
 use clap::{Parser, Subcommand};
 
 use crate::{
-    JirunResult, env,
+    env,
     task_context::TaskContext,
     utils::{build_jira_payload, print_line_separator},
+    JirunResult,
 };
 
 use crate::{config::JiraConfig, jira::RealJiraApi};

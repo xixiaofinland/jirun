@@ -1,4 +1,4 @@
-use crate::{JirunResult, jira::api::JiraApi};
+use crate::{jira::api::JiraApi, JirunResult};
 use serde_json::Value;
 
 pub struct RealJiraApi {

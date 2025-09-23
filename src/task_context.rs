@@ -1,4 +1,4 @@
-use crate::{JirunResult, config::JiraConfig, jira::JiraApi, utils::*};
+use crate::{config::JiraConfig, jira::JiraApi, utils::*, JirunResult};
 use serde_json::to_string_pretty;
 use std::collections::HashMap;
 
@@ -164,7 +164,7 @@ impl TaskContext {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::common::{mock_api::MockJiraApi};
+    use crate::common::mock_api::MockJiraApi;
 
     fn load_test_config() -> JiraConfig {
         let test_config_toml = r#"[server]
