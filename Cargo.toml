@@ -1,6 +1,6 @@
 [package]
 name = "jirun"
-version = "0.23.0"
+version = "0.24.0"
 edition = "2021"
 description = "A CLI tool that generates JIRA sub-task(s) with pre-populated field values"
 license = "MIT"
