@@ -62,3 +62,20 @@ fn template_command_dry_run_skips_confirmation_and_prints_payload() {
         .stdout(contains("Task B"))
         .stdout(contains("Dry-run: no requests were sent."));
 }
+
+#[test]
+#[ignore]
+fn new_command_simple_flag_creates_single_task() {
+    let dir = tempdir().unwrap();
+    write_sample_config_and_env(dir.path());
+
+    Command::cargo_bin("jirun")
+        .unwrap()
+        .current_dir(&dir)
+        .args(["new", "--parent", "PROJ-123", "--simple", "Fix login bug"])
+        .write_stdin("y\n")
+        .assert()
+        .success()
+        .stdout(contains("PROJ-123"))
+        .stdout(contains("Fix login bug"));
+}

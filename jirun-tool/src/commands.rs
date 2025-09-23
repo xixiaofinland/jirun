@@ -30,7 +30,10 @@ use crate::{config::JiraConfig, jira::RealJiraApi};
   4. jirun new --parent PROJ-123 --assignee alice
      Use [sub_tasks.new_tasks], overriding assignee with 'alice'
 
-  5. jirun template -p PROJ-123 --dry-run
+  5. jirun new --parent PROJ-123 --simple \"Fix login bug\"
+     Create a single sub-task with the given title (bypasses .jirun.toml)
+
+  6. jirun template -p PROJ-123 --dry-run
      Show request payloads without sending to JIRA"
 )]
 struct Cli {
@@ -56,6 +59,10 @@ enum Commands {
         /// Override default assignee
         #[arg(short = 'a', long = "assignee")]
         assignee: Option<String>,
+
+        /// Create a single sub-task with the provided title (bypasses .jirun.toml)
+        #[arg(short = 's', long = "simple")]
+        simple: Option<String>,
 
         /// Prevent actual sub-task creation (dry-run mode)
         #[arg(short = 'd', long = "dry-run")]
@@ -93,8 +100,9 @@ pub fn run() -> JirunResult<()> {
         crate::commands::Commands::New {
             parent,
             assignee,
+            simple,
             dry_run,
-        } => handle_new_command(parent, assignee.as_deref(), dry_run)?,
+        } => handle_new_command(parent, assignee.as_deref(), simple, dry_run)?,
     }
 
     Ok(())
@@ -113,16 +121,28 @@ fn handle_template_command(
     assignee: Option<&str>,
     dry_run: bool,
 ) -> JirunResult<()> {
-    handle_subtask_command(parent, assignee, dry_run, JiraConfig::template_task_list)
+    handle_subtask_command(
+        parent,
+        assignee,
+        None,
+        dry_run,
+        JiraConfig::template_task_list,
+    )
 }
 
-fn handle_new_command(parent: String, assignee: Option<&str>, dry_run: bool) -> JirunResult<()> {
-    handle_subtask_command(parent, assignee, dry_run, JiraConfig::new_task_list)
+fn handle_new_command(
+    parent: String,
+    assignee: Option<&str>,
+    simple: Option<String>,
+    dry_run: bool,
+) -> JirunResult<()> {
+    handle_subtask_command(parent, assignee, simple, dry_run, JiraConfig::new_task_list)
 }
 
 fn handle_subtask_command<F>(
     parent: String,
     assignee: Option<&str>,
+    simple: Option<String>,
     dry_run: bool,
     select_tasks: F,
 ) -> JirunResult<()>
@@ -131,7 +151,12 @@ where
 {
     let token = dotenvy::var("JIRA_TOKEN")?;
     let config = JiraConfig::load()?;
-    let tasks = select_tasks(&config);
+    let tasks = if let Some(simple_title) = simple {
+        vec![simple_title]
+    } else {
+        select_tasks(&config)
+    };
+
     let api = RealJiraApi::new(config.api_url(), token);
     let ctx = TaskContext::new(config, Box::new(api), &parent, assignee.map(str::to_string))?;
 
