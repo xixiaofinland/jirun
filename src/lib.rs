@@ -8,10 +8,8 @@ pub mod utils;
 #[cfg(test)]
 pub mod common;
 
-/// Result type used throughout the application
 pub type JirunResult<T> = Result<T, Box<dyn std::error::Error>>;
 
-/// Main entry point for the CLI application
 pub fn run() -> JirunResult<()> {
     commands::run()
 }
