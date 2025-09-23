@@ -164,7 +164,29 @@ impl TaskContext {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::common::{mock_api::MockJiraApi, test_helper::load_test_config};
+    use crate::common::{mock_api::MockJiraApi};
+
+    fn load_test_config() -> JiraConfig {
+        let test_config_toml = r#"[server]
+url = "https://yourcompany.atlassian.net"
+
+[prefill]
+labels = ["cli", "auto"]
+assignee = "john.doe"
+
+[sub_tasks]
+template_tasks = """
+Task A
+Task B
+"""
+
+new_tasks = """
+Task C
+Task D
+"""
+"#;
+        toml::from_str(test_config_toml).expect("Failed to parse test config")
+    }
 
     #[test]
     fn test_fetch_parent_summary_and_subtasks() {

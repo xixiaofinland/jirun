@@ -1,7 +1,32 @@
 use assert_cmd::Command;
-use jirun_tool::common::test_helper::write_sample_config_and_env;
 use predicates::str::contains;
 use tempfile::tempdir;
+
+fn write_sample_config_and_env(dir: &std::path::Path) {
+    use std::fs;
+
+    let config_content = r#"[server]
+url = "https://yourcompany.atlassian.net"
+
+[prefill]
+labels = ["cli", "auto"]
+assignee = "john.doe"
+
+[sub_tasks]
+template_tasks = """
+Task A
+Task B
+"""
+
+new_tasks = """
+Task C
+Task D
+"""
+"#;
+
+    fs::write(dir.join(".jirun.toml"), config_content).unwrap();
+    fs::write(dir.join(".env"), "JIRA_TOKEN=dummy-token\n").unwrap();
+}
 
 #[test]
 #[ignore]
@@ -79,3 +104,4 @@ fn new_command_simple_flag_creates_single_task() {
         .stdout(contains("PROJ-123"))
         .stdout(contains("Fix login bug"));
 }
+

@@ -1,5 +1,5 @@
 use crate::config::JiraConfig;
-use serde_json::{Map, Value, json};
+use serde_json::{json, Map, Value};
 
 pub fn build_jira_payload(
     config: &JiraConfig,
@@ -77,8 +77,29 @@ pub fn print_line_separator() {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::common::test_helper::load_test_config;
     use serde_json::json;
+
+    fn load_test_config() -> JiraConfig {
+        let test_config_toml = r#"[server]
+url = "https://yourcompany.atlassian.net"
+
+[prefill]
+labels = ["cli", "auto"]
+assignee = "john.doe"
+
+[sub_tasks]
+template_tasks = """
+Task A
+Task B
+"""
+
+new_tasks = """
+Task C
+Task D
+"""
+"#;
+        toml::from_str(test_config_toml).expect("Failed to parse test config")
+    }
 
     #[test]
     fn test_build_jira_payload_fields_are_correct() {

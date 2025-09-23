@@ -21,19 +21,7 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
-      # Publish jirun-tool first (if it's a dependency of jirun)
-      - name: Publish jirun-tool to crates.io
-        env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.JIRUN_CRATES_IO }}
-        run: |
-          cargo publish -p jirun-tool --no-verify
-        continue-on-error: false
-
-      # Wait a bit for crates.io to process the jirun-tool package
-      - name: Wait for crates.io to update
-        run: sleep 30
-
-      # Publish jirun crate to crates.io
+      # Publish jirun to crates.io
       - name: Publish jirun to crates.io
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.JIRUN_CRATES_IO }}
@@ -41,5 +29,4 @@ jobs:
           # Ensure Cargo.lock is up-to-date
           cargo check
           # Publish jirun crate to crates.io
-          cargo publish -p jirun --no-verify
-
+          cargo publish --no-verify
