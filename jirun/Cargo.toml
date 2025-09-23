@@ -6,7 +6,7 @@ description = "A Cli Generating JIRA sub-tasks from a template with a specified 
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-jirun-tool = { path = "../jirun-tool" }
+jirun-tool = { version = "0.1.0", path = "../jirun-tool" }
 
 [dev-dependencies]
 assert_cmd = "2.0.17"
